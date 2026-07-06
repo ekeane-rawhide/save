@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="EMK.Save.BL.Models/EMK.Save.BL.Models.csproj" />
+  <Project Path="EMK.Save.MigrationHandler/EMK.Save.MigrationHandler.csproj" />
+</Solution>
