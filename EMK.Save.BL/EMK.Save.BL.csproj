@@ -7,12 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.9" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.9" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.9" />
+    <ProjectReference Include="..\EMK.Save.BL.Models\EMK.Save.BL.Models.csproj" />
+    <ProjectReference Include="..\EMK.Save.PL\EMK.Save.PL.csproj" />
   </ItemGroup>
 
 </Project>
