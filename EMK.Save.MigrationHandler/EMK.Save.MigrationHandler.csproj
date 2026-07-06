@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RWH.Cars.PL\RWH.Cars.PL.csproj" />
+    <ProjectReference Include="..\EMK.Save.PL\EMK.Save.PL.csproj" />
   </ItemGroup>
 
 </Project>
