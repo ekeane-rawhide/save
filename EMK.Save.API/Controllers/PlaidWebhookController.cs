@@ -12,14 +12,17 @@ public class PlaidWebhookController : ControllerBase
     private readonly DbContextOptions<SaveEntities>  options;
     private readonly ILogger<PlaidWebhookController> logger;
     private readonly IPlaidSyncService               syncService;
+    private readonly INotificationDispatchService    dispatch;
 
     public PlaidWebhookController(ILogger<PlaidWebhookController> logger,
                                   DbContextOptions<SaveEntities>  options,
-                                  IPlaidSyncService               syncService)
+                                  IPlaidSyncService               syncService,
+                                  INotificationDispatchService    dispatch)
     {
         this.logger      = logger;
         this.options     = options;
         this.syncService = syncService;
+        this.dispatch    = dispatch;
     }
 
     [HttpPost("webhook")]
@@ -50,10 +53,9 @@ public class PlaidWebhookController : ControllerBase
 
                 case ("ITEM", "ERROR"):
                 {
-                    var notificationManager = new PushNotificationManager(options, logger);
                     foreach (Guid userId in accounts.Select(a => a.UserId).Distinct())
                     {
-                        await notificationManager.QueueAccountErrorNotificationAsync(
+                        await dispatch.DispatchAccountErrorAsync(
                             accounts[0].SharedBudgetId, userId, accounts[0].InstitutionName);
                     }
                     logger.LogWarning("Plaid ITEM_ERROR for item {ItemId} ({Institution})",

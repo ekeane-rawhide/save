@@ -11,6 +11,8 @@ export class ApiError extends Error {
 
 const BASE_URL = import.meta.env.VITE_API_URL
 
+console.log('API Client BASE_URL:', BASE_URL)
+
 type Rollback = boolean
 
 class ApiClient {
@@ -33,8 +35,11 @@ class ApiClient {
   }
 
   private async request<T>(path: string, init?: RequestInit): Promise<T> {
-    const response = await fetch(`${BASE_URL}/${path}`, init)
+    const url = `${BASE_URL}/${path}`
+    console.log('API Request:', { method: init?.method || 'GET', url, body: init?.body })
+    const response = await fetch(url, init)
     const text = await response.text()
+    console.log('API Response:', { status: response.status, statusText: response.statusText, body: text })
     const data = text ? JSON.parse(text) : null
 
     if (!response.ok) {

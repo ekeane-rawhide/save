@@ -37,6 +37,9 @@ services:
       Plaid__Environment: ${PLAID_ENVIRONMENT:-Sandbox}
       Plaid__WebhookUrl: ${PLAID_WEBHOOK_URL:-}
       Encryption__PlaidTokenKey: ${PLAID_TOKEN_ENCRYPTION_KEY}
+      WebPush__Subject: ${WEBPUSH_SUBJECT:-mailto:support@example.com}
+      WebPush__PublicKey: ${WEBPUSH_PUBLIC_KEY}
+      WebPush__PrivateKey: ${WEBPUSH_PRIVATE_KEY}
       AllowedOrigins: "http://localhost:8080"
     ports:
       - "5021:8080"
@@ -51,6 +54,7 @@ services:
       args:
         VITE_API_URL: "http://localhost:5021/api"
         VITE_HUB_URL: "http://localhost:5021/hubs/save"
+        VITE_VAPID_PUBLIC_KEY: ${WEBPUSH_PUBLIC_KEY}
     ports:
       - "8080:80"
     depends_on:

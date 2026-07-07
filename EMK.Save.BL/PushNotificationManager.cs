@@ -56,6 +56,41 @@ namespace EMK.Save.BL
             catch (Exception) { throw; }
         }
 
+        /// <summary>Records the outcome of an actual Web Push send attempt.</summary>
+        public new async Task<PushNotification> LoadByIdAsync(Guid id)
+        {
+            try
+            {
+                tblPushNotification row = (await base.LoadAsync(e => e.Id == id)).FirstOrDefault()
+                                          ?? throw new Exception("Notification not found.");
+                PushNotification n = Map<tblPushNotification, PushNotification>(row);
+                n.NotificationType  = (NotificationType)row.NotificationType;
+                n.Status            = (NotificationStatus)row.Status;
+                return n;
+            }
+            catch (Exception) { throw; }
+        }
+
+        public async Task<int> MarkSentAsync(Guid id, bool success, string errorMessage, bool rollback = false)
+        {
+            try
+            {
+                using var dc = new SaveEntities(options);
+                IDbContextTransaction? txn = rollback ? dc.Database.BeginTransaction() : null;
+
+                tblPushNotification row = dc.tblPushNotifications.Find(id)
+                                          ?? throw new Exception("Notification not found.");
+                row.Status       = (int)(success ? NotificationStatus.Delivered : NotificationStatus.Failed);
+                row.SentOn       = success ? DateTime.Now : null;
+                row.ErrorMessage = errorMessage;
+
+                int result = dc.SaveChanges();
+                txn?.Rollback();
+                return result;
+            }
+            catch (Exception) { throw; }
+        }
+
         public async Task<int> MarkReadAsync(Guid id, bool rollback = false)
         {
             try

@@ -8,11 +8,12 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // ── Serilog — structured logging to console + rolling file ────────────
+        // ── Serilog — structured logging to console + rolling file + Seq ────────
         builder.Host.UseSerilog((context, services, configuration) => configuration
             .ReadFrom.Configuration(context.Configuration)
             .ReadFrom.Services(services)
-            .Enrich.FromLogContext());
+            .Enrich.FromLogContext()
+            .WriteTo.Seq("http://localhost:5341"));
 
         // ── Database ──────────────────────────────────────────────────────────
         string? connectionString =
@@ -45,6 +46,12 @@ public class Program
         builder.Services.AddSingleton<ITokenEncryptor, TokenEncryptor>();
         builder.Services.AddScoped<IPlaidSyncService, PlaidSyncService>();
         builder.Services.AddSingleton<IPlaidWebhookVerifier, PlaidWebhookVerifier>();
+
+        // ── Web Push (VAPID) ──────────────────────────────────────────────────
+        builder.Services.Configure<WebPushSettings>(
+            builder.Configuration.GetSection("WebPush"));
+        builder.Services.AddHttpClient<IWebPushSender, WebPushSender>();
+        builder.Services.AddScoped<INotificationDispatchService, NotificationDispatchService>();
 
         // ── DI ────────────────────────────────────────────────────────────────
         builder.Services.AddScoped<IUserService, UserService>();
@@ -110,6 +117,9 @@ public class Program
 
         app.UseExceptionHandler();
 
+        // ── CORS must come before HTTPS redirect to avoid blocking preflight requests ──
+        app.UseCors("PWAPolicy");
+
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
@@ -118,9 +128,8 @@ public class Program
         else
         {
             app.UseHsts();
+            app.UseHttpsRedirection();
         }
-
-        app.UseHttpsRedirection();
         app.UseResponseCompression();
 
         // ── Security headers ──────────────────────────────────────────────────
@@ -131,8 +140,6 @@ public class Program
             context.Response.Headers["Referrer-Policy"] = "strict-origin-when-cross-origin";
             await next();
         });
-
-        app.UseCors("PWAPolicy");
 
         // Verifies Plaid's webhook signature before the request reaches model binding/controllers
         app.UseMiddleware<PlaidWebhookVerificationMiddleware>();
