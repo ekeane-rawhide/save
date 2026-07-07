@@ -63,90 +63,90 @@ namespace EMK.Save.PL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("6b308c14-59f2-483e-a1c6-9cf5695a1055"),
-                            CategoryId = new Guid("4802be14-6e75-4f32-9ef4-3219fb2d1381"),
+                            Id = new Guid("8236e33e-8659-45df-864f-2df47b429bb1"),
+                            CategoryId = new Guid("f213e9aa-454f-4d45-9c7a-45f81fb6e5bd"),
                             Month = 7,
                             Notes = "",
                             PlannedAmount = 1500m,
                             RolloverAmount = 0m,
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             Year = 2026
                         },
                         new
                         {
-                            Id = new Guid("1414712e-5ffe-46b0-9928-d47937766ccf"),
-                            CategoryId = new Guid("ff9a4543-7ce6-4dca-b999-df4b089369b2"),
+                            Id = new Guid("c8ac551e-1242-4f12-bc94-9270cec1089d"),
+                            CategoryId = new Guid("865d387b-a568-42d2-94f0-ce8abcf0af83"),
                             Month = 7,
                             Notes = "",
                             PlannedAmount = 400m,
                             RolloverAmount = 0m,
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             Year = 2026
                         },
                         new
                         {
-                            Id = new Guid("cef43024-460f-42ad-b2a1-8d2c8fe591be"),
-                            CategoryId = new Guid("088af96a-f35e-4ecf-a7bb-dcfe18e4491f"),
+                            Id = new Guid("f0ea80d2-2d92-4e5a-9e3c-d014fcf57f56"),
+                            CategoryId = new Guid("28d938ae-5d46-4ebe-bd6e-1cfe711e7886"),
                             Month = 7,
                             Notes = "",
                             PlannedAmount = 200m,
                             RolloverAmount = 0m,
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             Year = 2026
                         },
                         new
                         {
-                            Id = new Guid("d4fdf597-8fda-4def-8a46-b2f405fca028"),
-                            CategoryId = new Guid("74dd7e95-eb7c-4032-ab14-80c624b4f7c3"),
+                            Id = new Guid("20d8135a-7f35-4759-97d0-9d81f389ce05"),
+                            CategoryId = new Guid("a330c6ee-742f-474a-86bc-9a3435f4404d"),
                             Month = 7,
                             Notes = "",
                             PlannedAmount = 250m,
                             RolloverAmount = 0m,
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             Year = 2026
                         },
                         new
                         {
-                            Id = new Guid("ee753c14-52ac-477d-b056-f7b62befaa00"),
-                            CategoryId = new Guid("273366f8-4856-4b80-aabd-0685e83c484c"),
+                            Id = new Guid("182199b0-9047-4c5f-993f-f7797ff05ac0"),
+                            CategoryId = new Guid("18df092b-ac09-42e4-9cfc-63d94a947ceb"),
                             Month = 7,
                             Notes = "",
                             PlannedAmount = 100m,
                             RolloverAmount = 0m,
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             Year = 2026
                         },
                         new
                         {
-                            Id = new Guid("eb7b5e5b-ace1-47db-b3bb-1274f0a6c6f2"),
-                            CategoryId = new Guid("b65d18dd-d97a-460d-9d66-c5c1c8369757"),
+                            Id = new Guid("10610c70-55e9-408d-9d56-bdc11cf04db6"),
+                            CategoryId = new Guid("a85f43a1-9796-4d2e-b722-5eaa6fedca0c"),
                             Month = 7,
                             Notes = "",
                             PlannedAmount = 150m,
                             RolloverAmount = 0m,
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             Year = 2026
                         },
                         new
                         {
-                            Id = new Guid("1d488bb4-8c78-4e2c-a3c3-104c8d1bbcd8"),
-                            CategoryId = new Guid("cd79f3e9-b67d-4a88-978f-6dc315b3b688"),
+                            Id = new Guid("fad8e459-770d-4abe-9d46-c2fa24802fbf"),
+                            CategoryId = new Guid("2e07d55a-15f5-4b6c-9d60-6818f3e3f93f"),
                             Month = 7,
                             Notes = "",
                             PlannedAmount = 500m,
                             RolloverAmount = 0m,
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             Year = 2026
                         },
                         new
                         {
-                            Id = new Guid("664a6f15-114f-4989-9115-7e7fd2f1adc9"),
-                            CategoryId = new Guid("99763208-7007-4ced-947f-c87cc5a87ee8"),
+                            Id = new Guid("9683508f-f172-4eb0-a9fa-4fc32419ac27"),
+                            CategoryId = new Guid("16154f06-48c2-47c3-8aee-728a1bbfd358"),
                             Month = 7,
                             Notes = "Monthly salary",
                             PlannedAmount = 5000m,
                             RolloverAmount = 0m,
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             Year = 2026
                         });
                 });
@@ -196,90 +196,90 @@ namespace EMK.Save.PL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("4802be14-6e75-4f32-9ef4-3219fb2d1381"),
+                            Id = new Guid("f213e9aa-454f-4d45-9c7a-45f81fb6e5bd"),
                             CategoryType = 1,
                             Color = "#2a78d6",
                             Icon = "ti-home",
                             IsActive = true,
                             Name = "Housing",
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             SortOrder = 1
                         },
                         new
                         {
-                            Id = new Guid("ff9a4543-7ce6-4dca-b999-df4b089369b2"),
+                            Id = new Guid("865d387b-a568-42d2-94f0-ce8abcf0af83"),
                             CategoryType = 1,
                             Color = "#1baf7a",
                             Icon = "ti-shopping-cart",
                             IsActive = true,
                             Name = "Groceries",
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             SortOrder = 2
                         },
                         new
                         {
-                            Id = new Guid("088af96a-f35e-4ecf-a7bb-dcfe18e4491f"),
+                            Id = new Guid("28d938ae-5d46-4ebe-bd6e-1cfe711e7886"),
                             CategoryType = 1,
                             Color = "#eda100",
                             Icon = "ti-tools-kitchen",
                             IsActive = true,
                             Name = "Dining Out",
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             SortOrder = 3
                         },
                         new
                         {
-                            Id = new Guid("74dd7e95-eb7c-4032-ab14-80c624b4f7c3"),
+                            Id = new Guid("a330c6ee-742f-474a-86bc-9a3435f4404d"),
                             CategoryType = 1,
                             Color = "#4a3aa7",
                             Icon = "ti-car",
                             IsActive = true,
                             Name = "Transport",
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             SortOrder = 4
                         },
                         new
                         {
-                            Id = new Guid("273366f8-4856-4b80-aabd-0685e83c484c"),
+                            Id = new Guid("18df092b-ac09-42e4-9cfc-63d94a947ceb"),
                             CategoryType = 1,
                             Color = "#e34948",
                             Icon = "ti-device-tv",
                             IsActive = true,
                             Name = "Entertainment",
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             SortOrder = 5
                         },
                         new
                         {
-                            Id = new Guid("b65d18dd-d97a-460d-9d66-c5c1c8369757"),
+                            Id = new Guid("a85f43a1-9796-4d2e-b722-5eaa6fedca0c"),
                             CategoryType = 1,
                             Color = "#e87ba4",
                             Icon = "ti-heart",
                             IsActive = true,
                             Name = "Healthcare",
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             SortOrder = 6
                         },
                         new
                         {
-                            Id = new Guid("cd79f3e9-b67d-4a88-978f-6dc315b3b688"),
+                            Id = new Guid("2e07d55a-15f5-4b6c-9d60-6818f3e3f93f"),
                             CategoryType = 2,
                             Color = "#008300",
                             Icon = "ti-piggy-bank",
                             IsActive = true,
                             Name = "Savings",
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             SortOrder = 7
                         },
                         new
                         {
-                            Id = new Guid("99763208-7007-4ced-947f-c87cc5a87ee8"),
+                            Id = new Guid("16154f06-48c2-47c3-8aee-728a1bbfd358"),
                             CategoryType = 0,
                             Color = "#1baf7a",
                             Icon = "ti-wallet",
                             IsActive = true,
                             Name = "Income",
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             SortOrder = 0
                         });
                 });
@@ -320,57 +320,57 @@ namespace EMK.Save.PL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("a9264fdb-70e9-4058-a035-f55ce4889074"),
+                            Id = new Guid("97e7607c-5198-4021-ab72-f35ceaf2625e"),
                             DayExpenses = 1500m,
                             DayIncome = 5000m,
                             EntryDate = new DateTime(2026, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ProjectedBalance = 3500m,
                             RunningBalance = 3500m,
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             TransactionCount = 2
                         },
                         new
                         {
-                            Id = new Guid("7e6c26bc-9b50-47a4-94a5-046b9374e63b"),
+                            Id = new Guid("8b50f359-bc80-4dfb-9614-2c2e4c7bcaa7"),
                             DayExpenses = 127m,
                             DayIncome = 0m,
                             EntryDate = new DateTime(2026, 7, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ProjectedBalance = 3373m,
                             RunningBalance = 3373m,
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             TransactionCount = 1
                         },
                         new
                         {
-                            Id = new Guid("9466fc40-06c7-4f1a-9dad-412a43116262"),
+                            Id = new Guid("94c10ce3-1d3f-4bef-89a2-570f55f94e0d"),
                             DayExpenses = 14m,
                             DayIncome = 0m,
                             EntryDate = new DateTime(2026, 7, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ProjectedBalance = 3359m,
                             RunningBalance = 3359m,
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             TransactionCount = 1
                         },
                         new
                         {
-                            Id = new Guid("14113ed4-1cff-4792-b8df-eb9398f10519"),
+                            Id = new Guid("fb17517b-48b1-440a-b0d2-34bfbb169187"),
                             DayExpenses = 62m,
                             DayIncome = 0m,
                             EntryDate = new DateTime(2026, 7, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ProjectedBalance = 3297m,
                             RunningBalance = 3297m,
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             TransactionCount = 1
                         },
                         new
                         {
-                            Id = new Guid("0b7f4b18-acb3-4ab7-905c-e9492f848375"),
+                            Id = new Guid("33dd9864-1b71-48d8-a358-7bdfc1d0ea9c"),
                             DayExpenses = 18m,
                             DayIncome = 0m,
                             EntryDate = new DateTime(2026, 7, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ProjectedBalance = 2800m,
                             RunningBalance = 3279m,
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             TransactionCount = 1
                         });
                 });
@@ -407,74 +407,74 @@ namespace EMK.Save.PL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("f76f60e5-9c89-4f7f-a5bd-421c23e20d64"),
+                            Id = new Guid("8978cb6a-6e56-4a46-aa77-fcd440bafbaf"),
                             ActualAmount = 1500m,
-                            CategoryId = new Guid("4802be14-6e75-4f32-9ef4-3219fb2d1381"),
+                            CategoryId = new Guid("f213e9aa-454f-4d45-9c7a-45f81fb6e5bd"),
                             PlannedAmount = 1500m,
-                            SnapshotId = new Guid("0a2704d9-fd7a-40bd-82f9-66fd8bbd65f9"),
+                            SnapshotId = new Guid("9f6bdc8d-ec49-4621-aefa-c2a94662097b"),
                             TransactionCount = 1
                         },
                         new
                         {
-                            Id = new Guid("808ef97f-b4c2-4f91-ac18-3a8ed618ad8a"),
+                            Id = new Guid("efd17d60-c19f-403b-aa31-82c81d9a1459"),
                             ActualAmount = 380m,
-                            CategoryId = new Guid("ff9a4543-7ce6-4dca-b999-df4b089369b2"),
+                            CategoryId = new Guid("865d387b-a568-42d2-94f0-ce8abcf0af83"),
                             PlannedAmount = 400m,
-                            SnapshotId = new Guid("0a2704d9-fd7a-40bd-82f9-66fd8bbd65f9"),
+                            SnapshotId = new Guid("9f6bdc8d-ec49-4621-aefa-c2a94662097b"),
                             TransactionCount = 5
                         },
                         new
                         {
-                            Id = new Guid("00814d89-e4ec-4483-adc5-1777f4d6b4b8"),
+                            Id = new Guid("37e2ac2e-5ae2-4764-81a5-35cc14322957"),
                             ActualAmount = 260m,
-                            CategoryId = new Guid("088af96a-f35e-4ecf-a7bb-dcfe18e4491f"),
+                            CategoryId = new Guid("28d938ae-5d46-4ebe-bd6e-1cfe711e7886"),
                             PlannedAmount = 200m,
-                            SnapshotId = new Guid("0a2704d9-fd7a-40bd-82f9-66fd8bbd65f9"),
+                            SnapshotId = new Guid("9f6bdc8d-ec49-4621-aefa-c2a94662097b"),
                             TransactionCount = 8
                         },
                         new
                         {
-                            Id = new Guid("7f51b9a8-a594-4635-87bb-272569a11d96"),
+                            Id = new Guid("a79b401d-a9f8-40a4-b91d-20d807ab0632"),
                             ActualAmount = 290m,
-                            CategoryId = new Guid("74dd7e95-eb7c-4032-ab14-80c624b4f7c3"),
+                            CategoryId = new Guid("a330c6ee-742f-474a-86bc-9a3435f4404d"),
                             PlannedAmount = 250m,
-                            SnapshotId = new Guid("0a2704d9-fd7a-40bd-82f9-66fd8bbd65f9"),
+                            SnapshotId = new Guid("9f6bdc8d-ec49-4621-aefa-c2a94662097b"),
                             TransactionCount = 6
                         },
                         new
                         {
-                            Id = new Guid("6aac8402-bc73-4a75-8b2e-abf08600a24b"),
+                            Id = new Guid("5f165f3a-02dc-4bdd-a804-d5b85cf26c1a"),
                             ActualAmount = 85m,
-                            CategoryId = new Guid("273366f8-4856-4b80-aabd-0685e83c484c"),
+                            CategoryId = new Guid("18df092b-ac09-42e4-9cfc-63d94a947ceb"),
                             PlannedAmount = 100m,
-                            SnapshotId = new Guid("0a2704d9-fd7a-40bd-82f9-66fd8bbd65f9"),
+                            SnapshotId = new Guid("9f6bdc8d-ec49-4621-aefa-c2a94662097b"),
                             TransactionCount = 3
                         },
                         new
                         {
-                            Id = new Guid("41dbcac4-5b17-4d48-a1dd-8ad82901d6dc"),
+                            Id = new Guid("f43e9309-b14a-4135-9a8e-8530aea6c596"),
                             ActualAmount = 105m,
-                            CategoryId = new Guid("b65d18dd-d97a-460d-9d66-c5c1c8369757"),
+                            CategoryId = new Guid("a85f43a1-9796-4d2e-b722-5eaa6fedca0c"),
                             PlannedAmount = 150m,
-                            SnapshotId = new Guid("0a2704d9-fd7a-40bd-82f9-66fd8bbd65f9"),
+                            SnapshotId = new Guid("9f6bdc8d-ec49-4621-aefa-c2a94662097b"),
                             TransactionCount = 4
                         },
                         new
                         {
-                            Id = new Guid("64ed7a0a-5de8-47bb-8a40-300a8afea265"),
+                            Id = new Guid("c8592abb-e307-4d2c-b069-1410cf07623b"),
                             ActualAmount = 300m,
-                            CategoryId = new Guid("cd79f3e9-b67d-4a88-978f-6dc315b3b688"),
+                            CategoryId = new Guid("2e07d55a-15f5-4b6c-9d60-6818f3e3f93f"),
                             PlannedAmount = 500m,
-                            SnapshotId = new Guid("0a2704d9-fd7a-40bd-82f9-66fd8bbd65f9"),
+                            SnapshotId = new Guid("9f6bdc8d-ec49-4621-aefa-c2a94662097b"),
                             TransactionCount = 2
                         },
                         new
                         {
-                            Id = new Guid("60190e01-32da-4a2e-89e7-0a17dfb6fba5"),
+                            Id = new Guid("deba07d3-a38a-484f-81ec-36d323569c60"),
                             ActualAmount = 5000m,
-                            CategoryId = new Guid("99763208-7007-4ced-947f-c87cc5a87ee8"),
+                            CategoryId = new Guid("16154f06-48c2-47c3-8aee-728a1bbfd358"),
                             PlannedAmount = 5000m,
-                            SnapshotId = new Guid("0a2704d9-fd7a-40bd-82f9-66fd8bbd65f9"),
+                            SnapshotId = new Guid("9f6bdc8d-ec49-4621-aefa-c2a94662097b"),
                             TransactionCount = 1
                         });
                 });
@@ -524,10 +524,10 @@ namespace EMK.Save.PL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("51f24e9f-da2c-44fb-bfa6-ed26fcef8fb1"),
+                            Id = new Guid("81d4cb8c-424c-4d6a-9a85-c5f5c6a85875"),
                             Month = 5,
                             OverBudgetCategoryCount = 1,
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             SnapshotDate = new DateTime(2025, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             TotalBudgeted = 3100m,
                             TotalExpenses = 2650m,
@@ -538,10 +538,10 @@ namespace EMK.Save.PL.Migrations
                         },
                         new
                         {
-                            Id = new Guid("0a2704d9-fd7a-40bd-82f9-66fd8bbd65f9"),
+                            Id = new Guid("9f6bdc8d-ec49-4621-aefa-c2a94662097b"),
                             Month = 6,
                             OverBudgetCategoryCount = 2,
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             SnapshotDate = new DateTime(2025, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             TotalBudgeted = 3100m,
                             TotalExpenses = 2920m,
@@ -626,7 +626,7 @@ namespace EMK.Save.PL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("983f79ed-60f6-44b4-858b-74aec12fc14b"),
+                            Id = new Guid("12cddeeb-9452-4312-9d86-a9599bd956b5"),
                             AuthKey = "",
                             IsPushEnabled = false,
                             LargeTransactionThreshold = 100m,
@@ -642,11 +642,11 @@ namespace EMK.Save.PL.Migrations
                             PushEndpoint = "",
                             QuietHoursEnd = new TimeOnly(7, 0, 0),
                             QuietHoursStart = new TimeOnly(22, 0, 0),
-                            UserId = new Guid("f3a19404-554e-4297-a043-189d327532c6")
+                            UserId = new Guid("9f9f6c88-5c09-41ff-8b09-0ee67426fd15")
                         },
                         new
                         {
-                            Id = new Guid("41f9fa79-4380-4e3c-b99f-ca087846c6fe"),
+                            Id = new Guid("422a5432-edd8-4ff4-a609-3c4f53d47a0f"),
                             AuthKey = "",
                             IsPushEnabled = false,
                             LargeTransactionThreshold = 200m,
@@ -662,7 +662,7 @@ namespace EMK.Save.PL.Migrations
                             PushEndpoint = "",
                             QuietHoursEnd = new TimeOnly(7, 0, 0),
                             QuietHoursStart = new TimeOnly(22, 0, 0),
-                            UserId = new Guid("5ddab21a-0717-4cfa-a40c-ea59da059d0e")
+                            UserId = new Guid("2addd71c-50c8-4910-8934-587dfddaf4e0")
                         });
                 });
 
@@ -749,6 +749,11 @@ namespace EMK.Save.PL.Migrations
                     b.Property<Guid>("SharedBudgetId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("SyncCursor")
+                        .HasMaxLength(2000)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(2000)");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
@@ -764,7 +769,7 @@ namespace EMK.Save.PL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("1f749ecc-0210-4cd6-8ade-a6f5151045aa"),
+                            Id = new Guid("6c6eee68-42e1-4175-8bb9-db17d1678823"),
                             AccessTokenEncrypted = "DEMO_ENCRYPTED_TOKEN",
                             AccountName = "Checking",
                             AccountSubtype = "checking",
@@ -780,12 +785,12 @@ namespace EMK.Save.PL.Migrations
                             Mask = "1234",
                             PlaidAccountId = "demo_chk_001",
                             PlaidItemId = "demo_item_001",
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
-                            UserId = new Guid("f3a19404-554e-4297-a043-189d327532c6")
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
+                            UserId = new Guid("9f9f6c88-5c09-41ff-8b09-0ee67426fd15")
                         },
                         new
                         {
-                            Id = new Guid("38502936-10b3-476f-85cb-11659e6a076b"),
+                            Id = new Guid("aa167159-7f7c-46e9-9d42-333959be8357"),
                             AccessTokenEncrypted = "DEMO_ENCRYPTED_TOKEN",
                             AccountName = "Savings",
                             AccountSubtype = "savings",
@@ -801,8 +806,8 @@ namespace EMK.Save.PL.Migrations
                             Mask = "5678",
                             PlaidAccountId = "demo_sav_001",
                             PlaidItemId = "demo_item_001",
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
-                            UserId = new Guid("f3a19404-554e-4297-a043-189d327532c6")
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
+                            UserId = new Guid("9f9f6c88-5c09-41ff-8b09-0ee67426fd15")
                         });
                 });
 
@@ -893,11 +898,11 @@ namespace EMK.Save.PL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("56bb51db-c194-40ec-96cf-56da2e7bc3cf"),
+                            Id = new Guid("c8630244-e86f-4f1b-9285-ed07a0d79e1b"),
                             ActionUrl = "/budget",
                             Amount = 60m,
                             Body = "You've exceeded your Dining Out budget by $60.",
-                            CategoryId = new Guid("088af96a-f35e-4ecf-a7bb-dcfe18e4491f"),
+                            CategoryId = new Guid("28d938ae-5d46-4ebe-bd6e-1cfe711e7886"),
                             ErrorMessage = "",
                             Icon = "/icons/icon-192.png",
                             IsRead = false,
@@ -905,14 +910,14 @@ namespace EMK.Save.PL.Migrations
                             PushEndpoint = "",
                             ScheduledFor = new DateTime(2026, 7, 7, 0, 0, 0, 0, DateTimeKind.Local),
                             SentOn = new DateTime(2026, 7, 7, 0, 0, 0, 0, DateTimeKind.Local),
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             Status = 1,
                             Title = "Dining Out over budget!",
-                            UserId = new Guid("f3a19404-554e-4297-a043-189d327532c6")
+                            UserId = new Guid("9f9f6c88-5c09-41ff-8b09-0ee67426fd15")
                         },
                         new
                         {
-                            Id = new Guid("6b511dfd-878e-4df9-b5f9-d1ac6d1deab0"),
+                            Id = new Guid("203b2b4d-c5ba-489e-8fb1-2c3127bdcf38"),
                             ActionUrl = "/transactions",
                             Amount = 7m,
                             Body = "A $7.00 charge at Starbucks is pending review.",
@@ -923,19 +928,19 @@ namespace EMK.Save.PL.Migrations
                             PushEndpoint = "",
                             ScheduledFor = new DateTime(2026, 7, 7, 0, 0, 0, 0, DateTimeKind.Local),
                             SentOn = new DateTime(2026, 7, 7, 0, 0, 0, 0, DateTimeKind.Local),
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             Status = 1,
                             Title = "New transaction: Starbucks",
-                            TransactionId = new Guid("8fd372eb-c8ce-4df0-8dcb-5107c408a00c"),
-                            UserId = new Guid("f3a19404-554e-4297-a043-189d327532c6")
+                            TransactionId = new Guid("69b27686-647a-4d48-901d-a92dd0371035"),
+                            UserId = new Guid("9f9f6c88-5c09-41ff-8b09-0ee67426fd15")
                         },
                         new
                         {
-                            Id = new Guid("e4dd7062-3df5-4b8c-9874-293db0365446"),
+                            Id = new Guid("c4e6a911-fe26-4ab4-ad5d-00224602a66a"),
                             ActionUrl = "/budget",
                             Amount = 200m,
                             Body = "You've used 80% of your Transport budget.",
-                            CategoryId = new Guid("74dd7e95-eb7c-4032-ab14-80c624b4f7c3"),
+                            CategoryId = new Guid("a330c6ee-742f-474a-86bc-9a3435f4404d"),
                             ErrorMessage = "",
                             Icon = "/icons/icon-192.png",
                             IsRead = true,
@@ -943,10 +948,10 @@ namespace EMK.Save.PL.Migrations
                             PushEndpoint = "",
                             ScheduledFor = new DateTime(2026, 7, 7, 0, 0, 0, 0, DateTimeKind.Local),
                             SentOn = new DateTime(2026, 7, 7, 0, 0, 0, 0, DateTimeKind.Local),
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             Status = 1,
                             Title = "Transport at 80%",
-                            UserId = new Guid("f3a19404-554e-4297-a043-189d327532c6")
+                            UserId = new Guid("9f9f6c88-5c09-41ff-8b09-0ee67426fd15")
                         });
                 });
 
@@ -997,14 +1002,14 @@ namespace EMK.Save.PL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            Id = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             DateCreated = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Shared household budget",
                             InviteCode = "XEESFJ",
                             IsActive = true,
                             MaxMembers = 10,
                             Name = "Demo Family Budget",
-                            OwnerId = new Guid("f3a19404-554e-4297-a043-189d327532c6")
+                            OwnerId = new Guid("9f9f6c88-5c09-41ff-8b09-0ee67426fd15")
                         });
                 });
 
@@ -1070,9 +1075,9 @@ namespace EMK.Save.PL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("e2457fd5-4f6d-46e2-b0a5-8ac1a71fdeaf"),
+                            Id = new Guid("fb9e4f08-48ec-40c5-9b03-202d559bb4eb"),
                             Amount = 60m,
-                            CategoryId = new Guid("088af96a-f35e-4ecf-a7bb-dcfe18e4491f"),
+                            CategoryId = new Guid("28d938ae-5d46-4ebe-bd6e-1cfe711e7886"),
                             ChangePercent = 30.0,
                             GeneratedOn = new DateTime(2026, 7, 7, 0, 0, 0, 0, DateTimeKind.Local),
                             InsightType = 0,
@@ -1081,13 +1086,13 @@ namespace EMK.Save.PL.Migrations
                             Message = "You've spent $60 more than planned on dining this month.",
                             Month = 7,
                             Severity = 2,
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             Title = "Dining Out over budget",
                             Year = 2026
                         },
                         new
                         {
-                            Id = new Guid("9ac2c910-6758-4de3-a82c-c81e71773e71"),
+                            Id = new Guid("df23a5f8-6804-4212-9407-24a014791a74"),
                             GeneratedOn = new DateTime(2026, 7, 7, 0, 0, 0, 0, DateTimeKind.Local),
                             InsightType = 7,
                             IsDismissed = false,
@@ -1095,14 +1100,14 @@ namespace EMK.Save.PL.Migrations
                             Message = "You have 2 transactions that haven't been assigned to a budget category.",
                             Month = 7,
                             Severity = 1,
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             Title = "2 unassigned transactions",
                             Year = 2026
                         },
                         new
                         {
-                            Id = new Guid("5ec45efa-9211-4a7d-b1cb-cf455080fab5"),
-                            CategoryId = new Guid("ff9a4543-7ce6-4dca-b999-df4b089369b2"),
+                            Id = new Guid("24cb8fcd-69b0-4f6c-b8f7-d5998acf8879"),
+                            CategoryId = new Guid("865d387b-a568-42d2-94f0-ce8abcf0af83"),
                             ChangePercent = -5.0,
                             GeneratedOn = new DateTime(2026, 7, 7, 0, 0, 0, 0, DateTimeKind.Local),
                             InsightType = 1,
@@ -1111,7 +1116,7 @@ namespace EMK.Save.PL.Migrations
                             Message = "You're spending less on groceries than last month — great job!",
                             Month = 7,
                             Severity = 1,
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             Title = "Groceries on track",
                             Year = 2026
                         });
@@ -1214,9 +1219,9 @@ namespace EMK.Save.PL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("6af45b9d-c431-4fd4-aa6f-9c9568540085"),
+                            Id = new Guid("d29a7a52-876c-46fd-8541-e10bd4173bdf"),
                             Amount = -1500m,
-                            CategoryId = new Guid("4802be14-6e75-4f32-9ef4-3219fb2d1381"),
+                            CategoryId = new Guid("f213e9aa-454f-4d45-9c7a-45f81fb6e5bd"),
                             Description = "Monthly rent",
                             IsExcluded = false,
                             IsPending = false,
@@ -1224,18 +1229,18 @@ namespace EMK.Save.PL.Migrations
                             IsoCurrencyCode = "USD",
                             MerchantName = "Rent Payment",
                             Notes = "",
-                            PlaidAccountId = new Guid("1f749ecc-0210-4cd6-8ade-a6f5151045aa"),
+                            PlaidAccountId = new Guid("6c6eee68-42e1-4175-8bb9-db17d1678823"),
                             PlaidCategory = "Payment",
                             PlaidSubcategory = "Rent",
                             PlaidTransactionId = "txn_001",
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             TransactionDate = new DateTime(2026, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Id = new Guid("1dd49adb-9111-4143-9ddc-66be00ec2c89"),
+                            Id = new Guid("91075ad3-670f-48a8-afb3-38924167ca9b"),
                             Amount = -127m,
-                            CategoryId = new Guid("ff9a4543-7ce6-4dca-b999-df4b089369b2"),
+                            CategoryId = new Guid("865d387b-a568-42d2-94f0-ce8abcf0af83"),
                             Description = "Groceries",
                             IsExcluded = false,
                             IsPending = false,
@@ -1243,18 +1248,18 @@ namespace EMK.Save.PL.Migrations
                             IsoCurrencyCode = "USD",
                             MerchantName = "Whole Foods",
                             Notes = "",
-                            PlaidAccountId = new Guid("1f749ecc-0210-4cd6-8ade-a6f5151045aa"),
+                            PlaidAccountId = new Guid("6c6eee68-42e1-4175-8bb9-db17d1678823"),
                             PlaidCategory = "Food and Drink",
                             PlaidSubcategory = "Supermarkets",
                             PlaidTransactionId = "txn_002",
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             TransactionDate = new DateTime(2026, 7, 3, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Id = new Guid("cefe3de1-eaef-4e77-9a20-d53447c1df74"),
+                            Id = new Guid("66d6ff4f-81a7-4b29-b20a-bb8e931dd6ba"),
                             Amount = -14m,
-                            CategoryId = new Guid("088af96a-f35e-4ecf-a7bb-dcfe18e4491f"),
+                            CategoryId = new Guid("28d938ae-5d46-4ebe-bd6e-1cfe711e7886"),
                             Description = "Lunch",
                             IsExcluded = false,
                             IsPending = false,
@@ -1262,18 +1267,18 @@ namespace EMK.Save.PL.Migrations
                             IsoCurrencyCode = "USD",
                             MerchantName = "Chipotle",
                             Notes = "",
-                            PlaidAccountId = new Guid("1f749ecc-0210-4cd6-8ade-a6f5151045aa"),
+                            PlaidAccountId = new Guid("6c6eee68-42e1-4175-8bb9-db17d1678823"),
                             PlaidCategory = "Food and Drink",
                             PlaidSubcategory = "Restaurants",
                             PlaidTransactionId = "txn_003",
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             TransactionDate = new DateTime(2026, 7, 4, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Id = new Guid("899a0a35-5edf-45d0-8830-49a5145f16ec"),
+                            Id = new Guid("0bff46a3-5308-419e-b2ea-45dab1ae635b"),
                             Amount = -62m,
-                            CategoryId = new Guid("74dd7e95-eb7c-4032-ab14-80c624b4f7c3"),
+                            CategoryId = new Guid("a330c6ee-742f-474a-86bc-9a3435f4404d"),
                             Description = "Fuel",
                             IsExcluded = false,
                             IsPending = false,
@@ -1281,18 +1286,18 @@ namespace EMK.Save.PL.Migrations
                             IsoCurrencyCode = "USD",
                             MerchantName = "Shell Gas Station",
                             Notes = "",
-                            PlaidAccountId = new Guid("1f749ecc-0210-4cd6-8ade-a6f5151045aa"),
+                            PlaidAccountId = new Guid("6c6eee68-42e1-4175-8bb9-db17d1678823"),
                             PlaidCategory = "Travel",
                             PlaidSubcategory = "Gas Stations",
                             PlaidTransactionId = "txn_004",
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             TransactionDate = new DateTime(2026, 7, 5, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Id = new Guid("3c06d38a-68f6-4309-9f7a-031eb6c0290b"),
+                            Id = new Guid("6233a16e-a489-4259-a25e-680a1284d1ed"),
                             Amount = -18m,
-                            CategoryId = new Guid("273366f8-4856-4b80-aabd-0685e83c484c"),
+                            CategoryId = new Guid("18df092b-ac09-42e4-9cfc-63d94a947ceb"),
                             Description = "Streaming sub",
                             IsExcluded = false,
                             IsPending = false,
@@ -1300,18 +1305,18 @@ namespace EMK.Save.PL.Migrations
                             IsoCurrencyCode = "USD",
                             MerchantName = "Netflix",
                             Notes = "",
-                            PlaidAccountId = new Guid("1f749ecc-0210-4cd6-8ade-a6f5151045aa"),
+                            PlaidAccountId = new Guid("6c6eee68-42e1-4175-8bb9-db17d1678823"),
                             PlaidCategory = "Service",
                             PlaidSubcategory = "Subscription",
                             PlaidTransactionId = "txn_005",
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             TransactionDate = new DateTime(2026, 7, 6, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Id = new Guid("2cf7c40b-90c4-4bd0-8bba-4ad5e4ac7260"),
+                            Id = new Guid("bce65089-5c9c-49cd-9a0e-e4c057d6f5d2"),
                             Amount = 5000m,
-                            CategoryId = new Guid("99763208-7007-4ced-947f-c87cc5a87ee8"),
+                            CategoryId = new Guid("16154f06-48c2-47c3-8aee-728a1bbfd358"),
                             Description = "Payroll",
                             IsExcluded = false,
                             IsPending = false,
@@ -1319,18 +1324,18 @@ namespace EMK.Save.PL.Migrations
                             IsoCurrencyCode = "USD",
                             MerchantName = "Employer Direct Dep",
                             Notes = "",
-                            PlaidAccountId = new Guid("1f749ecc-0210-4cd6-8ade-a6f5151045aa"),
+                            PlaidAccountId = new Guid("6c6eee68-42e1-4175-8bb9-db17d1678823"),
                             PlaidCategory = "Payroll",
                             PlaidSubcategory = "Payroll",
                             PlaidTransactionId = "txn_006",
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             TransactionDate = new DateTime(2026, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Id = new Guid("4d29c646-7305-45e7-bad4-fdfadb90bc60"),
+                            Id = new Guid("d7bbe1ac-5629-427e-8fec-389539efb37f"),
                             Amount = -89m,
-                            CategoryId = new Guid("ff9a4543-7ce6-4dca-b999-df4b089369b2"),
+                            CategoryId = new Guid("865d387b-a568-42d2-94f0-ce8abcf0af83"),
                             Description = "Groceries",
                             IsExcluded = false,
                             IsPending = false,
@@ -1338,16 +1343,16 @@ namespace EMK.Save.PL.Migrations
                             IsoCurrencyCode = "USD",
                             MerchantName = "Trader Joe's",
                             Notes = "",
-                            PlaidAccountId = new Guid("1f749ecc-0210-4cd6-8ade-a6f5151045aa"),
+                            PlaidAccountId = new Guid("6c6eee68-42e1-4175-8bb9-db17d1678823"),
                             PlaidCategory = "Food and Drink",
                             PlaidSubcategory = "Supermarkets",
                             PlaidTransactionId = "txn_007",
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             TransactionDate = new DateTime(2026, 7, 8, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Id = new Guid("bd4b9933-4ab3-4e43-bdb9-31a998689b80"),
+                            Id = new Guid("da683557-8fa7-4757-bcd2-96caa2f404f4"),
                             Amount = -43m,
                             Description = "Online purchase",
                             IsExcluded = false,
@@ -1356,16 +1361,16 @@ namespace EMK.Save.PL.Migrations
                             IsoCurrencyCode = "USD",
                             MerchantName = "Amazon",
                             Notes = "",
-                            PlaidAccountId = new Guid("1f749ecc-0210-4cd6-8ade-a6f5151045aa"),
+                            PlaidAccountId = new Guid("6c6eee68-42e1-4175-8bb9-db17d1678823"),
                             PlaidCategory = "Shopping",
                             PlaidSubcategory = "Online",
                             PlaidTransactionId = "txn_008",
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             TransactionDate = new DateTime(2026, 7, 9, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Id = new Guid("8fd372eb-c8ce-4df0-8dcb-5107c408a00c"),
+                            Id = new Guid("69b27686-647a-4d48-901d-a92dd0371035"),
                             Amount = -7m,
                             Description = "Coffee",
                             IsExcluded = false,
@@ -1374,18 +1379,18 @@ namespace EMK.Save.PL.Migrations
                             IsoCurrencyCode = "USD",
                             MerchantName = "Starbucks",
                             Notes = "",
-                            PlaidAccountId = new Guid("1f749ecc-0210-4cd6-8ade-a6f5151045aa"),
+                            PlaidAccountId = new Guid("6c6eee68-42e1-4175-8bb9-db17d1678823"),
                             PlaidCategory = "Food and Drink",
                             PlaidSubcategory = "Coffee Shop",
                             PlaidTransactionId = "txn_009",
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             TransactionDate = new DateTime(2026, 7, 10, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Id = new Guid("b952159c-ca31-436b-b8e0-643181606487"),
+                            Id = new Guid("94804a3e-047d-4e0a-9666-910fb7d48344"),
                             Amount = -38m,
-                            CategoryId = new Guid("b65d18dd-d97a-460d-9d66-c5c1c8369757"),
+                            CategoryId = new Guid("a85f43a1-9796-4d2e-b722-5eaa6fedca0c"),
                             Description = "Pharmacy",
                             IsExcluded = false,
                             IsPending = false,
@@ -1393,11 +1398,11 @@ namespace EMK.Save.PL.Migrations
                             IsoCurrencyCode = "USD",
                             MerchantName = "CVS Pharmacy",
                             Notes = "",
-                            PlaidAccountId = new Guid("1f749ecc-0210-4cd6-8ade-a6f5151045aa"),
+                            PlaidAccountId = new Guid("6c6eee68-42e1-4175-8bb9-db17d1678823"),
                             PlaidCategory = "Medical",
                             PlaidSubcategory = "Pharmacies",
                             PlaidTransactionId = "txn_010",
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             TransactionDate = new DateTime(2026, 7, 11, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
@@ -1471,41 +1476,41 @@ namespace EMK.Save.PL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("f3a19404-554e-4297-a043-189d327532c6"),
+                            Id = new Guid("9f9f6c88-5c09-41ff-8b09-0ee67426fd15"),
                             BudgetRole = 0,
                             CurrencyCode = "USD",
                             DateRegistered = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "alex@emksave.com",
                             FirstName = "Alex",
                             LastName = "Demo",
-                            Password = "210000.r27gfn+F0KYK/X3FURCZrg==.q56PYreQxT4JsNtHBdOB4LCfEZbJARPmH193+wdBV6M=",
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            Password = "210000.KQQBHUCITNCsf7vHNITa/g==.ipIC718UjA+o5oGnWMV47cOxqeAf2pd/Tekj3A2iJxE=",
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             TimeZone = "America/Chicago",
                             UserId = "owner"
                         },
                         new
                         {
-                            Id = new Guid("5ddab21a-0717-4cfa-a40c-ea59da059d0e"),
+                            Id = new Guid("2addd71c-50c8-4910-8934-587dfddaf4e0"),
                             BudgetRole = 1,
                             CurrencyCode = "USD",
                             DateRegistered = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "jamie@emksave.com",
                             FirstName = "Jamie",
                             LastName = "Smith",
-                            Password = "210000.X5yQzVjG+AyJg8dN1S88fw==.I/2k8kA+8VFRva9LwLxACnH0/ud3YIDynODIKqYQobY=",
-                            SharedBudgetId = new Guid("e525f430-337e-4147-ae42-07fd8fdce182"),
+                            Password = "210000.PVOSX26R03MJMAT79eVt+w==.G2w9U1/DNw88fBiKKGgC3vif8oVaTDD/Lsa+g+JLlOc=",
+                            SharedBudgetId = new Guid("41c394db-a679-405e-995f-b48ed42dab0c"),
                             TimeZone = "America/Chicago",
                             UserId = "member"
                         },
                         new
                         {
-                            Id = new Guid("1cb9f7cf-89cd-4577-b2db-14708eedac8a"),
+                            Id = new Guid("36a2d704-30af-484d-b73c-bfbb60e5e4fa"),
                             CurrencyCode = "USD",
                             DateRegistered = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "taylor@emksave.com",
                             FirstName = "Taylor",
                             LastName = "New",
-                            Password = "210000.bSJrhIp7rjY84FV7PVRhYQ==.47xyRn9TSKbqrYZODyfwsKyx2P05DFidHEaOzN32H+0=",
+                            Password = "210000.Emgqctwvtp+1ZEtOw0L20g==.dJfRRDjOvcbwSl5/O078gSiNVmdl/u9/I2dKU30yrDE=",
                             TimeZone = "America/Chicago",
                             UserId = "solo"
                         });

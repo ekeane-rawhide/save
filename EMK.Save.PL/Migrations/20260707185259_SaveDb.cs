@@ -268,6 +268,7 @@ namespace EMK.Save.PL.Migrations
                     PlaidAccountId = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
                     PlaidItemId = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
                     AccessTokenEncrypted = table.Column<string>(type: "varchar(500)", unicode: false, maxLength: 500, nullable: false),
+                    SyncCursor = table.Column<string>(type: "varchar(2000)", unicode: false, maxLength: 2000, nullable: true),
                     InstitutionName = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
                     InstitutionLogoUrl = table.Column<string>(type: "varchar(500)", unicode: false, maxLength: 500, nullable: false),
                     AccountName = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
@@ -398,26 +399,26 @@ namespace EMK.Save.PL.Migrations
             migrationBuilder.InsertData(
                 table: "tblSharedBudget",
                 columns: new[] { "Id", "DateCreated", "Description", "InviteCode", "IsActive", "MaxMembers", "Name", "OwnerId" },
-                values: new object[] { new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Shared household budget", "XEESFJ", true, 10, "Demo Family Budget", new Guid("f3a19404-554e-4297-a043-189d327532c6") });
+                values: new object[] { new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Shared household budget", "XEESFJ", true, 10, "Demo Family Budget", new Guid("9f9f6c88-5c09-41ff-8b09-0ee67426fd15") });
 
             migrationBuilder.InsertData(
                 table: "tblUser",
                 columns: new[] { "Id", "BudgetRole", "CurrencyCode", "DateRegistered", "Email", "FirstName", "LastLogin", "LastName", "Password", "SharedBudgetId", "TimeZone", "UserId" },
-                values: new object[] { new Guid("1cb9f7cf-89cd-4577-b2db-14708eedac8a"), null, "USD", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "taylor@emksave.com", "Taylor", null, "New", "210000.bSJrhIp7rjY84FV7PVRhYQ==.47xyRn9TSKbqrYZODyfwsKyx2P05DFidHEaOzN32H+0=", null, "America/Chicago", "solo" });
+                values: new object[] { new Guid("36a2d704-30af-484d-b73c-bfbb60e5e4fa"), null, "USD", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "taylor@emksave.com", "Taylor", null, "New", "210000.Emgqctwvtp+1ZEtOw0L20g==.dJfRRDjOvcbwSl5/O078gSiNVmdl/u9/I2dKU30yrDE=", null, "America/Chicago", "solo" });
 
             migrationBuilder.InsertData(
                 table: "tblBudgetCategory",
                 columns: new[] { "Id", "CategoryType", "Color", "Icon", "IsActive", "Name", "SharedBudgetId", "SortOrder" },
                 values: new object[,]
                 {
-                    { new Guid("088af96a-f35e-4ecf-a7bb-dcfe18e4491f"), 1, "#eda100", "ti-tools-kitchen", true, "Dining Out", new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), 3 },
-                    { new Guid("273366f8-4856-4b80-aabd-0685e83c484c"), 1, "#e34948", "ti-device-tv", true, "Entertainment", new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), 5 },
-                    { new Guid("4802be14-6e75-4f32-9ef4-3219fb2d1381"), 1, "#2a78d6", "ti-home", true, "Housing", new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), 1 },
-                    { new Guid("74dd7e95-eb7c-4032-ab14-80c624b4f7c3"), 1, "#4a3aa7", "ti-car", true, "Transport", new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), 4 },
-                    { new Guid("99763208-7007-4ced-947f-c87cc5a87ee8"), 0, "#1baf7a", "ti-wallet", true, "Income", new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), 0 },
-                    { new Guid("b65d18dd-d97a-460d-9d66-c5c1c8369757"), 1, "#e87ba4", "ti-heart", true, "Healthcare", new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), 6 },
-                    { new Guid("cd79f3e9-b67d-4a88-978f-6dc315b3b688"), 2, "#008300", "ti-piggy-bank", true, "Savings", new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), 7 },
-                    { new Guid("ff9a4543-7ce6-4dca-b999-df4b089369b2"), 1, "#1baf7a", "ti-shopping-cart", true, "Groceries", new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), 2 }
+                    { new Guid("16154f06-48c2-47c3-8aee-728a1bbfd358"), 0, "#1baf7a", "ti-wallet", true, "Income", new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), 0 },
+                    { new Guid("18df092b-ac09-42e4-9cfc-63d94a947ceb"), 1, "#e34948", "ti-device-tv", true, "Entertainment", new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), 5 },
+                    { new Guid("28d938ae-5d46-4ebe-bd6e-1cfe711e7886"), 1, "#eda100", "ti-tools-kitchen", true, "Dining Out", new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), 3 },
+                    { new Guid("2e07d55a-15f5-4b6c-9d60-6818f3e3f93f"), 2, "#008300", "ti-piggy-bank", true, "Savings", new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), 7 },
+                    { new Guid("865d387b-a568-42d2-94f0-ce8abcf0af83"), 1, "#1baf7a", "ti-shopping-cart", true, "Groceries", new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), 2 },
+                    { new Guid("a330c6ee-742f-474a-86bc-9a3435f4404d"), 1, "#4a3aa7", "ti-car", true, "Transport", new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), 4 },
+                    { new Guid("a85f43a1-9796-4d2e-b722-5eaa6fedca0c"), 1, "#e87ba4", "ti-heart", true, "Healthcare", new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), 6 },
+                    { new Guid("f213e9aa-454f-4d45-9c7a-45f81fb6e5bd"), 1, "#2a78d6", "ti-home", true, "Housing", new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), 1 }
                 });
 
             migrationBuilder.InsertData(
@@ -425,11 +426,11 @@ namespace EMK.Save.PL.Migrations
                 columns: new[] { "Id", "DayExpenses", "DayIncome", "EntryDate", "ProjectedBalance", "RunningBalance", "SharedBudgetId", "TransactionCount" },
                 values: new object[,]
                 {
-                    { new Guid("0b7f4b18-acb3-4ab7-905c-e9492f848375"), 18m, 0m, new DateTime(2026, 7, 6, 0, 0, 0, 0, DateTimeKind.Unspecified), 2800m, 3279m, new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), 1 },
-                    { new Guid("14113ed4-1cff-4792-b8df-eb9398f10519"), 62m, 0m, new DateTime(2026, 7, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), 3297m, 3297m, new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), 1 },
-                    { new Guid("7e6c26bc-9b50-47a4-94a5-046b9374e63b"), 127m, 0m, new DateTime(2026, 7, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), 3373m, 3373m, new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), 1 },
-                    { new Guid("9466fc40-06c7-4f1a-9dad-412a43116262"), 14m, 0m, new DateTime(2026, 7, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), 3359m, 3359m, new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), 1 },
-                    { new Guid("a9264fdb-70e9-4058-a035-f55ce4889074"), 1500m, 5000m, new DateTime(2026, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 3500m, 3500m, new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), 2 }
+                    { new Guid("33dd9864-1b71-48d8-a358-7bdfc1d0ea9c"), 18m, 0m, new DateTime(2026, 7, 6, 0, 0, 0, 0, DateTimeKind.Unspecified), 2800m, 3279m, new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), 1 },
+                    { new Guid("8b50f359-bc80-4dfb-9614-2c2e4c7bcaa7"), 127m, 0m, new DateTime(2026, 7, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), 3373m, 3373m, new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), 1 },
+                    { new Guid("94c10ce3-1d3f-4bef-89a2-570f55f94e0d"), 14m, 0m, new DateTime(2026, 7, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), 3359m, 3359m, new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), 1 },
+                    { new Guid("97e7607c-5198-4021-ab72-f35ceaf2625e"), 1500m, 5000m, new DateTime(2026, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 3500m, 3500m, new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), 2 },
+                    { new Guid("fb17517b-48b1-440a-b0d2-34bfbb169187"), 62m, 0m, new DateTime(2026, 7, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), 3297m, 3297m, new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), 1 }
                 });
 
             migrationBuilder.InsertData(
@@ -437,22 +438,22 @@ namespace EMK.Save.PL.Migrations
                 columns: new[] { "Id", "Month", "OverBudgetCategoryCount", "SharedBudgetId", "SnapshotDate", "TotalBudgeted", "TotalExpenses", "TotalIncome", "TotalSavings", "TransactionCount", "Year" },
                 values: new object[,]
                 {
-                    { new Guid("0a2704d9-fd7a-40bd-82f9-66fd8bbd65f9"), 6, 2, new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), new DateTime(2025, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 3100m, 2920m, 5000m, 500m, 38, 2025 },
-                    { new Guid("51f24e9f-da2c-44fb-bfa6-ed26fcef8fb1"), 5, 1, new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), new DateTime(2025, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 3100m, 2650m, 5000m, 500m, 42, 2025 }
+                    { new Guid("81d4cb8c-424c-4d6a-9a85-c5f5c6a85875"), 5, 1, new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), new DateTime(2025, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 3100m, 2650m, 5000m, 500m, 42, 2025 },
+                    { new Guid("9f6bdc8d-ec49-4621-aefa-c2a94662097b"), 6, 2, new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), new DateTime(2025, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 3100m, 2920m, 5000m, 500m, 38, 2025 }
                 });
 
             migrationBuilder.InsertData(
                 table: "tblTrackingInsight",
                 columns: new[] { "Id", "Amount", "CategoryId", "ChangePercent", "GeneratedOn", "InsightType", "IsDismissed", "IsRead", "Message", "Month", "Severity", "SharedBudgetId", "Title", "Year" },
-                values: new object[] { new Guid("9ac2c910-6758-4de3-a82c-c81e71773e71"), null, null, null, new DateTime(2026, 7, 7, 0, 0, 0, 0, DateTimeKind.Local), 7, false, false, "You have 2 transactions that haven't been assigned to a budget category.", 7, 1, new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), "2 unassigned transactions", 2026 });
+                values: new object[] { new Guid("df23a5f8-6804-4212-9407-24a014791a74"), null, null, null, new DateTime(2026, 7, 7, 0, 0, 0, 0, DateTimeKind.Local), 7, false, false, "You have 2 transactions that haven't been assigned to a budget category.", 7, 1, new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), "2 unassigned transactions", 2026 });
 
             migrationBuilder.InsertData(
                 table: "tblUser",
                 columns: new[] { "Id", "BudgetRole", "CurrencyCode", "DateRegistered", "Email", "FirstName", "LastLogin", "LastName", "Password", "SharedBudgetId", "TimeZone", "UserId" },
                 values: new object[,]
                 {
-                    { new Guid("5ddab21a-0717-4cfa-a40c-ea59da059d0e"), 1, "USD", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "jamie@emksave.com", "Jamie", null, "Smith", "210000.X5yQzVjG+AyJg8dN1S88fw==.I/2k8kA+8VFRva9LwLxACnH0/ud3YIDynODIKqYQobY=", new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), "America/Chicago", "member" },
-                    { new Guid("f3a19404-554e-4297-a043-189d327532c6"), 0, "USD", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "alex@emksave.com", "Alex", null, "Demo", "210000.r27gfn+F0KYK/X3FURCZrg==.q56PYreQxT4JsNtHBdOB4LCfEZbJARPmH193+wdBV6M=", new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), "America/Chicago", "owner" }
+                    { new Guid("2addd71c-50c8-4910-8934-587dfddaf4e0"), 1, "USD", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "jamie@emksave.com", "Jamie", null, "Smith", "210000.PVOSX26R03MJMAT79eVt+w==.G2w9U1/DNw88fBiKKGgC3vif8oVaTDD/Lsa+g+JLlOc=", new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), "America/Chicago", "member" },
+                    { new Guid("9f9f6c88-5c09-41ff-8b09-0ee67426fd15"), 0, "USD", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "alex@emksave.com", "Alex", null, "Demo", "210000.KQQBHUCITNCsf7vHNITa/g==.ipIC718UjA+o5oGnWMV47cOxqeAf2pd/Tekj3A2iJxE=", new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), "America/Chicago", "owner" }
                 });
 
             migrationBuilder.InsertData(
@@ -460,14 +461,14 @@ namespace EMK.Save.PL.Migrations
                 columns: new[] { "Id", "CategoryId", "Month", "Notes", "PlannedAmount", "RolloverAmount", "SharedBudgetId", "Year" },
                 values: new object[,]
                 {
-                    { new Guid("1414712e-5ffe-46b0-9928-d47937766ccf"), new Guid("ff9a4543-7ce6-4dca-b999-df4b089369b2"), 7, "", 400m, 0m, new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), 2026 },
-                    { new Guid("1d488bb4-8c78-4e2c-a3c3-104c8d1bbcd8"), new Guid("cd79f3e9-b67d-4a88-978f-6dc315b3b688"), 7, "", 500m, 0m, new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), 2026 },
-                    { new Guid("664a6f15-114f-4989-9115-7e7fd2f1adc9"), new Guid("99763208-7007-4ced-947f-c87cc5a87ee8"), 7, "Monthly salary", 5000m, 0m, new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), 2026 },
-                    { new Guid("6b308c14-59f2-483e-a1c6-9cf5695a1055"), new Guid("4802be14-6e75-4f32-9ef4-3219fb2d1381"), 7, "", 1500m, 0m, new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), 2026 },
-                    { new Guid("cef43024-460f-42ad-b2a1-8d2c8fe591be"), new Guid("088af96a-f35e-4ecf-a7bb-dcfe18e4491f"), 7, "", 200m, 0m, new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), 2026 },
-                    { new Guid("d4fdf597-8fda-4def-8a46-b2f405fca028"), new Guid("74dd7e95-eb7c-4032-ab14-80c624b4f7c3"), 7, "", 250m, 0m, new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), 2026 },
-                    { new Guid("eb7b5e5b-ace1-47db-b3bb-1274f0a6c6f2"), new Guid("b65d18dd-d97a-460d-9d66-c5c1c8369757"), 7, "", 150m, 0m, new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), 2026 },
-                    { new Guid("ee753c14-52ac-477d-b056-f7b62befaa00"), new Guid("273366f8-4856-4b80-aabd-0685e83c484c"), 7, "", 100m, 0m, new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), 2026 }
+                    { new Guid("10610c70-55e9-408d-9d56-bdc11cf04db6"), new Guid("a85f43a1-9796-4d2e-b722-5eaa6fedca0c"), 7, "", 150m, 0m, new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), 2026 },
+                    { new Guid("182199b0-9047-4c5f-993f-f7797ff05ac0"), new Guid("18df092b-ac09-42e4-9cfc-63d94a947ceb"), 7, "", 100m, 0m, new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), 2026 },
+                    { new Guid("20d8135a-7f35-4759-97d0-9d81f389ce05"), new Guid("a330c6ee-742f-474a-86bc-9a3435f4404d"), 7, "", 250m, 0m, new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), 2026 },
+                    { new Guid("8236e33e-8659-45df-864f-2df47b429bb1"), new Guid("f213e9aa-454f-4d45-9c7a-45f81fb6e5bd"), 7, "", 1500m, 0m, new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), 2026 },
+                    { new Guid("9683508f-f172-4eb0-a9fa-4fc32419ac27"), new Guid("16154f06-48c2-47c3-8aee-728a1bbfd358"), 7, "Monthly salary", 5000m, 0m, new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), 2026 },
+                    { new Guid("c8ac551e-1242-4f12-bc94-9270cec1089d"), new Guid("865d387b-a568-42d2-94f0-ce8abcf0af83"), 7, "", 400m, 0m, new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), 2026 },
+                    { new Guid("f0ea80d2-2d92-4e5a-9e3c-d014fcf57f56"), new Guid("28d938ae-5d46-4ebe-bd6e-1cfe711e7886"), 7, "", 200m, 0m, new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), 2026 },
+                    { new Guid("fad8e459-770d-4abe-9d46-c2fa24802fbf"), new Guid("2e07d55a-15f5-4b6c-9d60-6818f3e3f93f"), 7, "", 500m, 0m, new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), 2026 }
                 });
 
             migrationBuilder.InsertData(
@@ -475,14 +476,14 @@ namespace EMK.Save.PL.Migrations
                 columns: new[] { "Id", "ActualAmount", "CategoryId", "PlannedAmount", "SnapshotId", "TransactionCount" },
                 values: new object[,]
                 {
-                    { new Guid("00814d89-e4ec-4483-adc5-1777f4d6b4b8"), 260m, new Guid("088af96a-f35e-4ecf-a7bb-dcfe18e4491f"), 200m, new Guid("0a2704d9-fd7a-40bd-82f9-66fd8bbd65f9"), 8 },
-                    { new Guid("41dbcac4-5b17-4d48-a1dd-8ad82901d6dc"), 105m, new Guid("b65d18dd-d97a-460d-9d66-c5c1c8369757"), 150m, new Guid("0a2704d9-fd7a-40bd-82f9-66fd8bbd65f9"), 4 },
-                    { new Guid("60190e01-32da-4a2e-89e7-0a17dfb6fba5"), 5000m, new Guid("99763208-7007-4ced-947f-c87cc5a87ee8"), 5000m, new Guid("0a2704d9-fd7a-40bd-82f9-66fd8bbd65f9"), 1 },
-                    { new Guid("64ed7a0a-5de8-47bb-8a40-300a8afea265"), 300m, new Guid("cd79f3e9-b67d-4a88-978f-6dc315b3b688"), 500m, new Guid("0a2704d9-fd7a-40bd-82f9-66fd8bbd65f9"), 2 },
-                    { new Guid("6aac8402-bc73-4a75-8b2e-abf08600a24b"), 85m, new Guid("273366f8-4856-4b80-aabd-0685e83c484c"), 100m, new Guid("0a2704d9-fd7a-40bd-82f9-66fd8bbd65f9"), 3 },
-                    { new Guid("7f51b9a8-a594-4635-87bb-272569a11d96"), 290m, new Guid("74dd7e95-eb7c-4032-ab14-80c624b4f7c3"), 250m, new Guid("0a2704d9-fd7a-40bd-82f9-66fd8bbd65f9"), 6 },
-                    { new Guid("808ef97f-b4c2-4f91-ac18-3a8ed618ad8a"), 380m, new Guid("ff9a4543-7ce6-4dca-b999-df4b089369b2"), 400m, new Guid("0a2704d9-fd7a-40bd-82f9-66fd8bbd65f9"), 5 },
-                    { new Guid("f76f60e5-9c89-4f7f-a5bd-421c23e20d64"), 1500m, new Guid("4802be14-6e75-4f32-9ef4-3219fb2d1381"), 1500m, new Guid("0a2704d9-fd7a-40bd-82f9-66fd8bbd65f9"), 1 }
+                    { new Guid("37e2ac2e-5ae2-4764-81a5-35cc14322957"), 260m, new Guid("28d938ae-5d46-4ebe-bd6e-1cfe711e7886"), 200m, new Guid("9f6bdc8d-ec49-4621-aefa-c2a94662097b"), 8 },
+                    { new Guid("5f165f3a-02dc-4bdd-a804-d5b85cf26c1a"), 85m, new Guid("18df092b-ac09-42e4-9cfc-63d94a947ceb"), 100m, new Guid("9f6bdc8d-ec49-4621-aefa-c2a94662097b"), 3 },
+                    { new Guid("8978cb6a-6e56-4a46-aa77-fcd440bafbaf"), 1500m, new Guid("f213e9aa-454f-4d45-9c7a-45f81fb6e5bd"), 1500m, new Guid("9f6bdc8d-ec49-4621-aefa-c2a94662097b"), 1 },
+                    { new Guid("a79b401d-a9f8-40a4-b91d-20d807ab0632"), 290m, new Guid("a330c6ee-742f-474a-86bc-9a3435f4404d"), 250m, new Guid("9f6bdc8d-ec49-4621-aefa-c2a94662097b"), 6 },
+                    { new Guid("c8592abb-e307-4d2c-b069-1410cf07623b"), 300m, new Guid("2e07d55a-15f5-4b6c-9d60-6818f3e3f93f"), 500m, new Guid("9f6bdc8d-ec49-4621-aefa-c2a94662097b"), 2 },
+                    { new Guid("deba07d3-a38a-484f-81ec-36d323569c60"), 5000m, new Guid("16154f06-48c2-47c3-8aee-728a1bbfd358"), 5000m, new Guid("9f6bdc8d-ec49-4621-aefa-c2a94662097b"), 1 },
+                    { new Guid("efd17d60-c19f-403b-aa31-82c81d9a1459"), 380m, new Guid("865d387b-a568-42d2-94f0-ce8abcf0af83"), 400m, new Guid("9f6bdc8d-ec49-4621-aefa-c2a94662097b"), 5 },
+                    { new Guid("f43e9309-b14a-4135-9a8e-8530aea6c596"), 105m, new Guid("a85f43a1-9796-4d2e-b722-5eaa6fedca0c"), 150m, new Guid("9f6bdc8d-ec49-4621-aefa-c2a94662097b"), 4 }
                 });
 
             migrationBuilder.InsertData(
@@ -490,17 +491,17 @@ namespace EMK.Save.PL.Migrations
                 columns: new[] { "Id", "AuthKey", "IsPushEnabled", "LargeTransactionThreshold", "LastUpdated", "NotifyMonthlySummary", "NotifyOnBudgetOverage", "NotifyOnBudgetWarning", "NotifyOnLargeTransaction", "NotifyOnNewTransaction", "NotifyOnSyncError", "NotifyWeeklySummary", "P256dhKey", "PushEndpoint", "QuietHoursEnd", "QuietHoursStart", "UserId" },
                 values: new object[,]
                 {
-                    { new Guid("41f9fa79-4380-4e3c-b99f-ca087846c6fe"), "", false, 200m, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, true, false, false, true, true, false, "", "", new TimeOnly(7, 0, 0), new TimeOnly(22, 0, 0), new Guid("5ddab21a-0717-4cfa-a40c-ea59da059d0e") },
-                    { new Guid("983f79ed-60f6-44b4-858b-74aec12fc14b"), "", false, 100m, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, true, true, true, true, true, false, "", "", new TimeOnly(7, 0, 0), new TimeOnly(22, 0, 0), new Guid("f3a19404-554e-4297-a043-189d327532c6") }
+                    { new Guid("12cddeeb-9452-4312-9d86-a9599bd956b5"), "", false, 100m, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, true, true, true, true, true, false, "", "", new TimeOnly(7, 0, 0), new TimeOnly(22, 0, 0), new Guid("9f9f6c88-5c09-41ff-8b09-0ee67426fd15") },
+                    { new Guid("422a5432-edd8-4ff4-a609-3c4f53d47a0f"), "", false, 200m, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, true, false, false, true, true, false, "", "", new TimeOnly(7, 0, 0), new TimeOnly(22, 0, 0), new Guid("2addd71c-50c8-4910-8934-587dfddaf4e0") }
                 });
 
             migrationBuilder.InsertData(
                 table: "tblPlaidAccount",
-                columns: new[] { "Id", "AccessTokenEncrypted", "AccountName", "AccountSubtype", "AccountType", "AvailableBalance", "CurrentBalance", "DateLinked", "InstitutionLogoUrl", "InstitutionName", "IsActive", "IsoCurrencyCode", "LastSynced", "Mask", "PlaidAccountId", "PlaidItemId", "SharedBudgetId", "UserId" },
+                columns: new[] { "Id", "AccessTokenEncrypted", "AccountName", "AccountSubtype", "AccountType", "AvailableBalance", "CurrentBalance", "DateLinked", "InstitutionLogoUrl", "InstitutionName", "IsActive", "IsoCurrencyCode", "LastSynced", "Mask", "PlaidAccountId", "PlaidItemId", "SharedBudgetId", "SyncCursor", "UserId" },
                 values: new object[,]
                 {
-                    { new Guid("1f749ecc-0210-4cd6-8ade-a6f5151045aa"), "DEMO_ENCRYPTED_TOKEN", "Checking", "checking", "depository", 3150.00m, 3200.00m, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "", "First National Bank", true, "USD", new DateTime(2025, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "1234", "demo_chk_001", "demo_item_001", new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), new Guid("f3a19404-554e-4297-a043-189d327532c6") },
-                    { new Guid("38502936-10b3-476f-85cb-11659e6a076b"), "DEMO_ENCRYPTED_TOKEN", "Savings", "savings", "depository", 8500.00m, 8500.00m, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "", "First National Bank", true, "USD", new DateTime(2025, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "5678", "demo_sav_001", "demo_item_001", new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), new Guid("f3a19404-554e-4297-a043-189d327532c6") }
+                    { new Guid("6c6eee68-42e1-4175-8bb9-db17d1678823"), "DEMO_ENCRYPTED_TOKEN", "Checking", "checking", "depository", 3150.00m, 3200.00m, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "", "First National Bank", true, "USD", new DateTime(2025, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "1234", "demo_chk_001", "demo_item_001", new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), null, new Guid("9f9f6c88-5c09-41ff-8b09-0ee67426fd15") },
+                    { new Guid("aa167159-7f7c-46e9-9d42-333959be8357"), "DEMO_ENCRYPTED_TOKEN", "Savings", "savings", "depository", 8500.00m, 8500.00m, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "", "First National Bank", true, "USD", new DateTime(2025, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "5678", "demo_sav_001", "demo_item_001", new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), null, new Guid("9f9f6c88-5c09-41ff-8b09-0ee67426fd15") }
                 });
 
             migrationBuilder.InsertData(
@@ -508,8 +509,8 @@ namespace EMK.Save.PL.Migrations
                 columns: new[] { "Id", "ActionUrl", "Amount", "Body", "CategoryId", "ErrorMessage", "Icon", "IsRead", "NotificationType", "PushEndpoint", "ScheduledFor", "SentOn", "SharedBudgetId", "Status", "Title", "TransactionId", "UserId" },
                 values: new object[,]
                 {
-                    { new Guid("56bb51db-c194-40ec-96cf-56da2e7bc3cf"), "/budget", 60m, "You've exceeded your Dining Out budget by $60.", new Guid("088af96a-f35e-4ecf-a7bb-dcfe18e4491f"), "", "/icons/icon-192.png", false, 1, "", new DateTime(2026, 7, 7, 0, 0, 0, 0, DateTimeKind.Local), new DateTime(2026, 7, 7, 0, 0, 0, 0, DateTimeKind.Local), new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), 1, "Dining Out over budget!", null, new Guid("f3a19404-554e-4297-a043-189d327532c6") },
-                    { new Guid("e4dd7062-3df5-4b8c-9874-293db0365446"), "/budget", 200m, "You've used 80% of your Transport budget.", new Guid("74dd7e95-eb7c-4032-ab14-80c624b4f7c3"), "", "/icons/icon-192.png", true, 2, "", new DateTime(2026, 7, 7, 0, 0, 0, 0, DateTimeKind.Local), new DateTime(2026, 7, 7, 0, 0, 0, 0, DateTimeKind.Local), new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), 1, "Transport at 80%", null, new Guid("f3a19404-554e-4297-a043-189d327532c6") }
+                    { new Guid("c4e6a911-fe26-4ab4-ad5d-00224602a66a"), "/budget", 200m, "You've used 80% of your Transport budget.", new Guid("a330c6ee-742f-474a-86bc-9a3435f4404d"), "", "/icons/icon-192.png", true, 2, "", new DateTime(2026, 7, 7, 0, 0, 0, 0, DateTimeKind.Local), new DateTime(2026, 7, 7, 0, 0, 0, 0, DateTimeKind.Local), new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), 1, "Transport at 80%", null, new Guid("9f9f6c88-5c09-41ff-8b09-0ee67426fd15") },
+                    { new Guid("c8630244-e86f-4f1b-9285-ed07a0d79e1b"), "/budget", 60m, "You've exceeded your Dining Out budget by $60.", new Guid("28d938ae-5d46-4ebe-bd6e-1cfe711e7886"), "", "/icons/icon-192.png", false, 1, "", new DateTime(2026, 7, 7, 0, 0, 0, 0, DateTimeKind.Local), new DateTime(2026, 7, 7, 0, 0, 0, 0, DateTimeKind.Local), new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), 1, "Dining Out over budget!", null, new Guid("9f9f6c88-5c09-41ff-8b09-0ee67426fd15") }
                 });
 
             migrationBuilder.InsertData(
@@ -517,8 +518,8 @@ namespace EMK.Save.PL.Migrations
                 columns: new[] { "Id", "Amount", "CategoryId", "ChangePercent", "GeneratedOn", "InsightType", "IsDismissed", "IsRead", "Message", "Month", "Severity", "SharedBudgetId", "Title", "Year" },
                 values: new object[,]
                 {
-                    { new Guid("5ec45efa-9211-4a7d-b1cb-cf455080fab5"), null, new Guid("ff9a4543-7ce6-4dca-b999-df4b089369b2"), -5.0, new DateTime(2026, 7, 7, 0, 0, 0, 0, DateTimeKind.Local), 1, false, false, "You're spending less on groceries than last month — great job!", 7, 1, new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), "Groceries on track", 2026 },
-                    { new Guid("e2457fd5-4f6d-46e2-b0a5-8ac1a71fdeaf"), 60m, new Guid("088af96a-f35e-4ecf-a7bb-dcfe18e4491f"), 30.0, new DateTime(2026, 7, 7, 0, 0, 0, 0, DateTimeKind.Local), 0, false, false, "You've spent $60 more than planned on dining this month.", 7, 2, new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), "Dining Out over budget", 2026 }
+                    { new Guid("24cb8fcd-69b0-4f6c-b8f7-d5998acf8879"), null, new Guid("865d387b-a568-42d2-94f0-ce8abcf0af83"), -5.0, new DateTime(2026, 7, 7, 0, 0, 0, 0, DateTimeKind.Local), 1, false, false, "You're spending less on groceries than last month — great job!", 7, 1, new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), "Groceries on track", 2026 },
+                    { new Guid("fb9e4f08-48ec-40c5-9b03-202d559bb4eb"), 60m, new Guid("28d938ae-5d46-4ebe-bd6e-1cfe711e7886"), 30.0, new DateTime(2026, 7, 7, 0, 0, 0, 0, DateTimeKind.Local), 0, false, false, "You've spent $60 more than planned on dining this month.", 7, 2, new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), "Dining Out over budget", 2026 }
                 });
 
             migrationBuilder.InsertData(
@@ -526,22 +527,22 @@ namespace EMK.Save.PL.Migrations
                 columns: new[] { "Id", "Amount", "CategoryId", "Description", "IsExcluded", "IsPending", "IsReviewed", "IsoCurrencyCode", "MerchantName", "Notes", "PlaidAccountId", "PlaidCategory", "PlaidSubcategory", "PlaidTransactionId", "PostedDate", "SharedBudgetId", "TransactionDate", "tblBudgetId" },
                 values: new object[,]
                 {
-                    { new Guid("1dd49adb-9111-4143-9ddc-66be00ec2c89"), -127m, new Guid("ff9a4543-7ce6-4dca-b999-df4b089369b2"), "Groceries", false, false, true, "USD", "Whole Foods", "", new Guid("1f749ecc-0210-4cd6-8ade-a6f5151045aa"), "Food and Drink", "Supermarkets", "txn_002", null, new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), new DateTime(2026, 7, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
-                    { new Guid("2cf7c40b-90c4-4bd0-8bba-4ad5e4ac7260"), 5000m, new Guid("99763208-7007-4ced-947f-c87cc5a87ee8"), "Payroll", false, false, true, "USD", "Employer Direct Dep", "", new Guid("1f749ecc-0210-4cd6-8ade-a6f5151045aa"), "Payroll", "Payroll", "txn_006", null, new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), new DateTime(2026, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
-                    { new Guid("3c06d38a-68f6-4309-9f7a-031eb6c0290b"), -18m, new Guid("273366f8-4856-4b80-aabd-0685e83c484c"), "Streaming sub", false, false, true, "USD", "Netflix", "", new Guid("1f749ecc-0210-4cd6-8ade-a6f5151045aa"), "Service", "Subscription", "txn_005", null, new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), new DateTime(2026, 7, 6, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
-                    { new Guid("4d29c646-7305-45e7-bad4-fdfadb90bc60"), -89m, new Guid("ff9a4543-7ce6-4dca-b999-df4b089369b2"), "Groceries", false, false, false, "USD", "Trader Joe's", "", new Guid("1f749ecc-0210-4cd6-8ade-a6f5151045aa"), "Food and Drink", "Supermarkets", "txn_007", null, new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), new DateTime(2026, 7, 8, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
-                    { new Guid("6af45b9d-c431-4fd4-aa6f-9c9568540085"), -1500m, new Guid("4802be14-6e75-4f32-9ef4-3219fb2d1381"), "Monthly rent", false, false, true, "USD", "Rent Payment", "", new Guid("1f749ecc-0210-4cd6-8ade-a6f5151045aa"), "Payment", "Rent", "txn_001", null, new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), new DateTime(2026, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
-                    { new Guid("899a0a35-5edf-45d0-8830-49a5145f16ec"), -62m, new Guid("74dd7e95-eb7c-4032-ab14-80c624b4f7c3"), "Fuel", false, false, true, "USD", "Shell Gas Station", "", new Guid("1f749ecc-0210-4cd6-8ade-a6f5151045aa"), "Travel", "Gas Stations", "txn_004", null, new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), new DateTime(2026, 7, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
-                    { new Guid("8fd372eb-c8ce-4df0-8dcb-5107c408a00c"), -7m, null, "Coffee", false, true, false, "USD", "Starbucks", "", new Guid("1f749ecc-0210-4cd6-8ade-a6f5151045aa"), "Food and Drink", "Coffee Shop", "txn_009", null, new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), new DateTime(2026, 7, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
-                    { new Guid("b952159c-ca31-436b-b8e0-643181606487"), -38m, new Guid("b65d18dd-d97a-460d-9d66-c5c1c8369757"), "Pharmacy", false, false, false, "USD", "CVS Pharmacy", "", new Guid("1f749ecc-0210-4cd6-8ade-a6f5151045aa"), "Medical", "Pharmacies", "txn_010", null, new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), new DateTime(2026, 7, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
-                    { new Guid("bd4b9933-4ab3-4e43-bdb9-31a998689b80"), -43m, null, "Online purchase", false, false, false, "USD", "Amazon", "", new Guid("1f749ecc-0210-4cd6-8ade-a6f5151045aa"), "Shopping", "Online", "txn_008", null, new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), new DateTime(2026, 7, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
-                    { new Guid("cefe3de1-eaef-4e77-9a20-d53447c1df74"), -14m, new Guid("088af96a-f35e-4ecf-a7bb-dcfe18e4491f"), "Lunch", false, false, true, "USD", "Chipotle", "", new Guid("1f749ecc-0210-4cd6-8ade-a6f5151045aa"), "Food and Drink", "Restaurants", "txn_003", null, new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), new DateTime(2026, 7, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null }
+                    { new Guid("0bff46a3-5308-419e-b2ea-45dab1ae635b"), -62m, new Guid("a330c6ee-742f-474a-86bc-9a3435f4404d"), "Fuel", false, false, true, "USD", "Shell Gas Station", "", new Guid("6c6eee68-42e1-4175-8bb9-db17d1678823"), "Travel", "Gas Stations", "txn_004", null, new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), new DateTime(2026, 7, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
+                    { new Guid("6233a16e-a489-4259-a25e-680a1284d1ed"), -18m, new Guid("18df092b-ac09-42e4-9cfc-63d94a947ceb"), "Streaming sub", false, false, true, "USD", "Netflix", "", new Guid("6c6eee68-42e1-4175-8bb9-db17d1678823"), "Service", "Subscription", "txn_005", null, new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), new DateTime(2026, 7, 6, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
+                    { new Guid("66d6ff4f-81a7-4b29-b20a-bb8e931dd6ba"), -14m, new Guid("28d938ae-5d46-4ebe-bd6e-1cfe711e7886"), "Lunch", false, false, true, "USD", "Chipotle", "", new Guid("6c6eee68-42e1-4175-8bb9-db17d1678823"), "Food and Drink", "Restaurants", "txn_003", null, new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), new DateTime(2026, 7, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
+                    { new Guid("69b27686-647a-4d48-901d-a92dd0371035"), -7m, null, "Coffee", false, true, false, "USD", "Starbucks", "", new Guid("6c6eee68-42e1-4175-8bb9-db17d1678823"), "Food and Drink", "Coffee Shop", "txn_009", null, new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), new DateTime(2026, 7, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
+                    { new Guid("91075ad3-670f-48a8-afb3-38924167ca9b"), -127m, new Guid("865d387b-a568-42d2-94f0-ce8abcf0af83"), "Groceries", false, false, true, "USD", "Whole Foods", "", new Guid("6c6eee68-42e1-4175-8bb9-db17d1678823"), "Food and Drink", "Supermarkets", "txn_002", null, new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), new DateTime(2026, 7, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
+                    { new Guid("94804a3e-047d-4e0a-9666-910fb7d48344"), -38m, new Guid("a85f43a1-9796-4d2e-b722-5eaa6fedca0c"), "Pharmacy", false, false, false, "USD", "CVS Pharmacy", "", new Guid("6c6eee68-42e1-4175-8bb9-db17d1678823"), "Medical", "Pharmacies", "txn_010", null, new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), new DateTime(2026, 7, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
+                    { new Guid("bce65089-5c9c-49cd-9a0e-e4c057d6f5d2"), 5000m, new Guid("16154f06-48c2-47c3-8aee-728a1bbfd358"), "Payroll", false, false, true, "USD", "Employer Direct Dep", "", new Guid("6c6eee68-42e1-4175-8bb9-db17d1678823"), "Payroll", "Payroll", "txn_006", null, new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), new DateTime(2026, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
+                    { new Guid("d29a7a52-876c-46fd-8541-e10bd4173bdf"), -1500m, new Guid("f213e9aa-454f-4d45-9c7a-45f81fb6e5bd"), "Monthly rent", false, false, true, "USD", "Rent Payment", "", new Guid("6c6eee68-42e1-4175-8bb9-db17d1678823"), "Payment", "Rent", "txn_001", null, new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), new DateTime(2026, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
+                    { new Guid("d7bbe1ac-5629-427e-8fec-389539efb37f"), -89m, new Guid("865d387b-a568-42d2-94f0-ce8abcf0af83"), "Groceries", false, false, false, "USD", "Trader Joe's", "", new Guid("6c6eee68-42e1-4175-8bb9-db17d1678823"), "Food and Drink", "Supermarkets", "txn_007", null, new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), new DateTime(2026, 7, 8, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
+                    { new Guid("da683557-8fa7-4757-bcd2-96caa2f404f4"), -43m, null, "Online purchase", false, false, false, "USD", "Amazon", "", new Guid("6c6eee68-42e1-4175-8bb9-db17d1678823"), "Shopping", "Online", "txn_008", null, new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), new DateTime(2026, 7, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), null }
                 });
 
             migrationBuilder.InsertData(
                 table: "tblPushNotification",
                 columns: new[] { "Id", "ActionUrl", "Amount", "Body", "CategoryId", "ErrorMessage", "Icon", "IsRead", "NotificationType", "PushEndpoint", "ScheduledFor", "SentOn", "SharedBudgetId", "Status", "Title", "TransactionId", "UserId" },
-                values: new object[] { new Guid("6b511dfd-878e-4df9-b5f9-d1ac6d1deab0"), "/transactions", 7m, "A $7.00 charge at Starbucks is pending review.", null, "", "/icons/icon-192.png", false, 0, "", new DateTime(2026, 7, 7, 0, 0, 0, 0, DateTimeKind.Local), new DateTime(2026, 7, 7, 0, 0, 0, 0, DateTimeKind.Local), new Guid("e525f430-337e-4147-ae42-07fd8fdce182"), 1, "New transaction: Starbucks", new Guid("8fd372eb-c8ce-4df0-8dcb-5107c408a00c"), new Guid("f3a19404-554e-4297-a043-189d327532c6") });
+                values: new object[] { new Guid("203b2b4d-c5ba-489e-8fb1-2c3127bdcf38"), "/transactions", 7m, "A $7.00 charge at Starbucks is pending review.", null, "", "/icons/icon-192.png", false, 0, "", new DateTime(2026, 7, 7, 0, 0, 0, 0, DateTimeKind.Local), new DateTime(2026, 7, 7, 0, 0, 0, 0, DateTimeKind.Local), new Guid("41c394db-a679-405e-995f-b48ed42dab0c"), 1, "New transaction: Starbucks", new Guid("69b27686-647a-4d48-901d-a92dd0371035"), new Guid("9f9f6c88-5c09-41ff-8b09-0ee67426fd15") });
 
             migrationBuilder.CreateIndex(
                 name: "IX_tblBudget_CategoryId",
