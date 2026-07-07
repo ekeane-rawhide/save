@@ -67,6 +67,22 @@ namespace EMK.Save.BL
             catch (Exception) { throw; }
         }
 
+        /// <summary>Removes a transaction Plaid has reported as removed (e.g. a pending charge that never posted).</summary>
+        public async Task<int> RemoveByPlaidTransactionIdAsync(string plaidTransactionId)
+        {
+            try
+            {
+                using var dc = new SaveEntities(options);
+                tblTransaction? row = dc.tblTransactions
+                    .FirstOrDefault(t => t.PlaidTransactionId == plaidTransactionId);
+                if (row == null) return 0;
+
+                dc.tblTransactions.Remove(row);
+                return dc.SaveChanges();
+            }
+            catch (Exception) { throw; }
+        }
+
         /// <summary>Assigns (or clears) a budget category on a transaction and marks it reviewed.</summary>
         public async Task<int> AssignCategoryAsync(
             Guid transactionId, Guid? categoryId, bool rollback = false)

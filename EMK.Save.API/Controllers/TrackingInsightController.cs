@@ -1,3 +1,6 @@
+using EMK.Save.API.Hubs;
+using Microsoft.AspNetCore.SignalR;
+
 namespace EMK.Save.API.Controllers;
 
 [Route("api/[controller]")]
@@ -6,12 +9,15 @@ public class TrackingInsightController : ControllerBase
 {
     private readonly DbContextOptions<SaveEntities>   options;
     private readonly ILogger<TrackingInsightController> logger;
+    private readonly IHubContext<SaveHub>              hub;
 
     public TrackingInsightController(ILogger<TrackingInsightController> logger,
-                                     DbContextOptions<SaveEntities>     options)
+                                     DbContextOptions<SaveEntities>     options,
+                                     IHubContext<SaveHub>               hub)
     {
         this.logger  = logger;
         this.options = options;
+        this.hub     = hub;
     }
 
     /// <summary>Returns active (non-dismissed) insights for a SharedBudget in a given month.</summary>
@@ -41,6 +47,10 @@ public class TrackingInsightController : ControllerBase
         {
             var manager  = new TrackingInsightManager(options, logger);
             var insights = await manager.GenerateInsightsAsync(sharedBudgetId, month, year);
+
+            await hub.Clients.Group(SaveHub.BudgetGroup(sharedBudgetId))
+                .SendAsync("InsightsGenerated", insights);
+
             return Ok(insights);
         }
         catch (Exception ex)

@@ -1,8 +1,10 @@
 using EMK.Save.API.Helpers;
+using EMK.Save.API.Hubs;
 using EMK.Save.BL;
 using EMK.Save.BL.Models;
 using EMK.Save.PL.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace EMK.Save.API.Controllers;
@@ -13,12 +15,15 @@ public class TransactionController : ControllerBase
 {
     private readonly DbContextOptions<SaveEntities> options;
     private readonly ILogger<TransactionController> logger;
+    private readonly IHubContext<SaveHub>           hub;
 
     public TransactionController(ILogger<TransactionController> logger,
-                                 DbContextOptions<SaveEntities> options)
+                                 DbContextOptions<SaveEntities> options,
+                                 IHubContext<SaveHub>           hub)
     {
         this.logger  = logger;
         this.options = options;
+        this.hub     = hub;
     }
 
     /// <summary>Returns all non-excluded transactions for a SharedBudget in a given month.</summary>
@@ -83,6 +88,11 @@ public class TransactionController : ControllerBase
             var manager      = new TransactionManager(options, logger);
             int rowsAffected = await manager.AssignCategoryAsync(
                 transactionId, request.CategoryId, rollback);
+
+            var updated = await manager.LoadByIdAsync(transactionId);
+            await hub.Clients.Group(SaveHub.BudgetGroup(updated.SharedBudgetId))
+                .SendAsync("TransactionUpdated", updated);
+
             return Ok(new Dictionary<string, string> { { "rowsaffected", rowsAffected.ToString() } });
         }
         catch (Exception ex)
@@ -101,6 +111,11 @@ public class TransactionController : ControllerBase
         {
             var manager  = new TransactionManager(options, logger);
             int newCount = await manager.UpsertFromPlaidAsync(transactions, rollback);
+
+            foreach (var sharedBudgetId in transactions.Select(t => t.SharedBudgetId).Distinct())
+                await hub.Clients.Group(SaveHub.BudgetGroup(sharedBudgetId))
+                    .SendAsync("TransactionsSynced", new { sharedBudgetId, newCount });
+
             return Ok(new Dictionary<string, string> { { "newcount", newCount.ToString() } });
         }
         catch (Exception ex)

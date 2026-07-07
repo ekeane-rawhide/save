@@ -8,6 +8,7 @@ public partial class tblPlaidAccount : IEntity
     public string   PlaidAccountId       { get; set; } = null!;   // Plaid's account_id
     public string   PlaidItemId          { get; set; } = null!;   // Plaid's item_id
     public string   AccessTokenEncrypted { get; set; } = null!;   // never exposed to client
+    public string?  SyncCursor           { get; set; }            // Plaid /transactions/sync cursor — never exposed to client
     public string   InstitutionName      { get; set; } = null!;
     public string   InstitutionLogoUrl   { get; set; } = null!;
     public string   AccountName          { get; set; } = null!;

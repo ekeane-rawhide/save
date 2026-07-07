@@ -19,6 +19,7 @@ public class GenericController<T, U> : ControllerBase
         this.manager = (U)Activator.CreateInstance(typeof(U), options, logger)!;
     }
 
+    [Authorize]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<T>>> Get()
     {
@@ -32,6 +33,7 @@ public class GenericController<T, U> : ControllerBase
         }
     }
 
+    [Authorize]
     [HttpGet("{id}")]
     public async Task<ActionResult<T>> Get(Guid id)
     {

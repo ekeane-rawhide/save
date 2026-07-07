@@ -20,3 +20,4 @@ global using EMK.Save.PL.Data;
 global using EMK.Save.API.Helpers;
 global using EMK.Save.API.Models;
 global using EMK.Save.API.Services;
+global using Going.Plaid;

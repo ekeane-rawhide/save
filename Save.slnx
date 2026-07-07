@@ -4,4 +4,8 @@
   <Project Path="EMK.Save.BL/EMK.Save.BL.csproj" />
   <Project Path="EMK.Save.MigrationHandler/EMK.Save.MigrationHandler.csproj" />
   <Project Path="EMK.Save.PL/EMK.Save.PL.csproj" />
+  <Project Path="EMK.Utility/EMK.Utility.csproj" Id="f911ac89-9b09-43b0-9f6a-491d2f08c153" />
+  <Project Path="EMK.Save.PWA/EMK.Save.PWA.esproj">
+    <Build />
+  </Project>
 </Solution>

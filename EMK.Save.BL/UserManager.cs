@@ -11,11 +11,31 @@ namespace EMK.Save.BL
         public UserManager(DbContextOptions<SaveEntities> options, ILogger logger) : base(options, logger) { }
         public UserManager(DbContextOptions<SaveEntities> options) : base(options) { }
 
-        public static string GetHash(string password)
+        // ── Password hashing — PBKDF2-HMAC-SHA256, self-describing "iterations.salt.hash" format ──
+        private const int Pbkdf2Iterations = 210_000;
+        private const int SaltSize = 16;
+        private const int HashSize = 32;
+
+        public static string HashPassword(string password)
         {
-            using var hasher = SHA1.Create();
-            var bytes = Encoding.UTF8.GetBytes(password);
-            return Convert.ToBase64String(hasher.ComputeHash(bytes));
+            byte[] salt = RandomNumberGenerator.GetBytes(SaltSize);
+            byte[] hash = Rfc2898DeriveBytes.Pbkdf2(
+                Encoding.UTF8.GetBytes(password), salt, Pbkdf2Iterations, HashAlgorithmName.SHA256, HashSize);
+            return $"{Pbkdf2Iterations}.{Convert.ToBase64String(salt)}.{Convert.ToBase64String(hash)}";
+        }
+
+        public static bool VerifyPassword(string password, string stored)
+        {
+            string[] parts = stored.Split('.');
+            if (parts.Length != 3 || !int.TryParse(parts[0], out int iterations))
+                return false;
+
+            byte[] salt = Convert.FromBase64String(parts[1]);
+            byte[] expected = Convert.FromBase64String(parts[2]);
+            byte[] actual = Rfc2898DeriveBytes.Pbkdf2(
+                Encoding.UTF8.GetBytes(password), salt, iterations, HashAlgorithmName.SHA256, expected.Length);
+
+            return CryptographicOperations.FixedTimeEquals(actual, expected);
         }
 
         public async Task<Guid> InsertAsync(User user, bool rollback = false)
@@ -23,7 +43,7 @@ namespace EMK.Save.BL
             try
             {
                 tblUser row = Map<User, tblUser>(user);
-                row.Password = GetHash(user.Password);
+                row.Password = HashPassword(user.Password);
                 return await base.InsertAsync(row,
                     e => e.UserId == user.UserId,
                     rollback);
@@ -76,10 +96,12 @@ namespace EMK.Save.BL
             try
             {
                 using var dc    = new SaveEntities(options);
-                string hashed   = GetHash(password);
-                tblUser row     = dc.tblUsers
-                                    .FirstOrDefault(u => u.UserId == userId && u.Password == hashed)
+                tblUser row     = dc.tblUsers.FirstOrDefault(u => u.UserId == userId)
                                   ?? throw new LoginFailureException();
+
+                if (!VerifyPassword(password, row.Password))
+                    throw new LoginFailureException();
+
                 row.LastLogin   = DateTime.Now;
                 dc.SaveChanges();
 

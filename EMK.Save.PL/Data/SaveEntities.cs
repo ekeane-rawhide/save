@@ -66,11 +66,14 @@ namespace EMK.Save.PL.Data
         }
 
         // ── Helpers ───────────────────────────────────────────────────────────
+        // Mirrors EMK.Save.BL.UserManager's PBKDF2 hashing (duplicated — PL cannot reference BL).
         private static string GetHash(string password)
         {
-            using var hasher = SHA1.Create();
-            byte[] bytes = Encoding.UTF8.GetBytes(password);
-            return Convert.ToBase64String(hasher.ComputeHash(bytes));
+            const int iterations = 210_000;
+            byte[] salt = RandomNumberGenerator.GetBytes(16);
+            byte[] hash = Rfc2898DeriveBytes.Pbkdf2(
+                Encoding.UTF8.GetBytes(password), salt, iterations, HashAlgorithmName.SHA256, 32);
+            return $"{iterations}.{Convert.ToBase64String(salt)}.{Convert.ToBase64String(hash)}";
         }
 
         private static string MakeInviteCode()
@@ -180,7 +183,7 @@ namespace EMK.Save.PL.Data
 
                 entity.Property(e => e.Password)
                     .IsRequired()
-                    .HasMaxLength(28)
+                    .HasMaxLength(100)
                     .IsUnicode(false);
 
                 entity.Property(e => e.TimeZone)
@@ -375,6 +378,10 @@ namespace EMK.Save.PL.Data
                     .HasMaxLength(500)
                     .IsUnicode(false);
 
+                entity.Property(e => e.SyncCursor)
+                    .HasMaxLength(2000)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.InstitutionName)
                     .IsRequired()
                     .HasMaxLength(100)
@@ -542,7 +549,7 @@ namespace EMK.Save.PL.Data
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Transactions)
                     .HasForeignKey(d => d.CategoryId)
-                    .OnDelete(DeleteBehavior.SetNull)
+                    .OnDelete(DeleteBehavior.NoAction)
                     .HasConstraintName("FK_tblTransaction_CategoryId");
             });
 
@@ -736,7 +743,7 @@ namespace EMK.Save.PL.Data
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.TrackingInsights)
                     .HasForeignKey(d => d.CategoryId)
-                    .OnDelete(DeleteBehavior.SetNull)
+                    .OnDelete(DeleteBehavior.NoAction)
                     .HasConstraintName("FK_tblTrackingInsight_CategoryId");
             });
 
@@ -817,13 +824,13 @@ namespace EMK.Save.PL.Data
                 entity.HasOne(d => d.Transaction)
                     .WithMany(p => p.PushNotifications)
                     .HasForeignKey(d => d.TransactionId)
-                    .OnDelete(DeleteBehavior.SetNull)
+                    .OnDelete(DeleteBehavior.NoAction)
                     .HasConstraintName("FK_tblPushNotification_TransactionId");
 
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.PushNotifications)
                     .HasForeignKey(d => d.CategoryId)
-                    .OnDelete(DeleteBehavior.SetNull)
+                    .OnDelete(DeleteBehavior.NoAction)
                     .HasConstraintName("FK_tblPushNotification_CategoryId");
             });
 

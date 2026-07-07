@@ -19,9 +19,14 @@ public class JwtMiddleware
 
     public async Task Invoke(HttpContext context, IUserService userService)
     {
+        // SignalR websocket connections can't set custom headers, so the JS client
+        // sends the token via ?access_token=... on the /hubs/* negotiate request instead.
         var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
-        if (token != null)
+        if (string.IsNullOrEmpty(token) && context.Request.Path.StartsWithSegments("/hubs"))
+            token = context.Request.Query["access_token"];
+
+        if (!string.IsNullOrEmpty(token))
             await AttachUserToContextAsync(context, userService, token);
 
         await _next(context);

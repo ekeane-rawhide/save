@@ -1,3 +1,8 @@
+using Going.Plaid.Accounts;
+using Going.Plaid.Entity;
+using Going.Plaid.Item;
+using Going.Plaid.Link;
+
 namespace EMK.Save.API.Controllers;
 
 [Route("api/[controller]")]
@@ -6,12 +11,21 @@ public class PlaidAccountController : ControllerBase
 {
     private readonly DbContextOptions<SaveEntities>  options;
     private readonly ILogger<PlaidAccountController> logger;
+    private readonly PlaidClient                     plaidClient;
+    private readonly ITokenEncryptor                 tokenEncryptor;
+    private readonly IPlaidSyncService               syncService;
 
     public PlaidAccountController(ILogger<PlaidAccountController> logger,
-                                  DbContextOptions<SaveEntities>  options)
+                                  DbContextOptions<SaveEntities>  options,
+                                  PlaidClient                     plaidClient,
+                                  ITokenEncryptor                 tokenEncryptor,
+                                  IPlaidSyncService               syncService)
     {
-        this.logger  = logger;
-        this.options = options;
+        this.logger         = logger;
+        this.options        = options;
+        this.plaidClient    = plaidClient;
+        this.tokenEncryptor = tokenEncryptor;
+        this.syncService    = syncService;
     }
 
     /// <summary>Returns all active linked accounts for a SharedBudget.</summary>
@@ -45,35 +59,43 @@ public class PlaidAccountController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Creates a Plaid Link token and returns it to the PWA to initialize Plaid Link.
-    /// In production this calls the Plaid API; here it returns a mock token structure.
-    /// </summary>
+    /// <summary>Creates a real Plaid Link token so the PWA can initialize Plaid Link (react-plaid-link).</summary>
     [Authorize]
     [HttpGet("linktoken/{userId}")]
-    public ActionResult<PlaidLinkToken> GetLinkToken(Guid userId)
+    public async Task<ActionResult<PlaidLinkToken>> GetLinkToken(Guid userId)
     {
         try
         {
-            // TODO: replace with real Plaid client.LinkTokenCreate() call
+            var request = new LinkTokenCreateRequest
+            {
+                User = new LinkTokenCreateRequestUser { ClientUserId = userId.ToString() },
+                ClientName = "Save",
+                Products = [Products.Transactions],
+                CountryCodes = [CountryCode.Us],
+                Language = Language.English,
+            };
+
+            var response = await plaidClient.LinkTokenCreateAsync(request);
+
             var linkToken = new PlaidLinkToken
             {
-                LinkToken  = $"link-sandbox-{Guid.NewGuid()}",
-                Expiration = DateTime.UtcNow.AddMinutes(30),
-                RequestId  = Guid.NewGuid().ToString()
+                LinkToken  = response.LinkToken,
+                Expiration = response.Expiration.DateTime,
+                RequestId  = response.RequestId ?? string.Empty,
             };
             logger.LogInformation("Link token created for user {UserId}", userId);
             return Ok(linkToken);
         }
         catch (Exception ex)
         {
+            logger.LogError(ex, "Failed to create Plaid link token for user {UserId}", userId);
             return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
         }
     }
 
     /// <summary>
-    /// Exchanges the public_token returned by Plaid Link for an access_token,
-    /// then persists the linked account(s).
+    /// Exchanges the public_token returned by Plaid Link for a real access_token,
+    /// fetches the linked accounts from Plaid, and persists one row per account.
     /// </summary>
     [Authorize]
     [HttpPost("exchange/{sharedBudgetId}/{userId}/{rollback?}")]
@@ -84,37 +106,71 @@ public class PlaidAccountController : ControllerBase
     {
         try
         {
-            // TODO: call Plaid API to exchange public_token → access_token
-            // For now store a placeholder encrypted token
-            string encryptedToken = $"ENCRYPTED:{exchange.PublicToken}";
+            var exchangeResponse = await plaidClient.ItemPublicTokenExchangeAsync(
+                new ItemPublicTokenExchangeRequest { PublicToken = exchange.PublicToken });
 
-            var account = new PlaidAccount
-            {
-                UserId           = userId,
-                SharedBudgetId   = sharedBudgetId,
-                PlaidAccountId   = exchange.SelectedAccountIds.FirstOrDefault() ?? Guid.NewGuid().ToString(),
-                PlaidItemId      = Guid.NewGuid().ToString(),
-                InstitutionName  = exchange.InstitutionName,
-                InstitutionLogoUrl = exchange.InstitutionLogoUrl,
-                AccountName      = "Checking",
-                Mask             = "0000",
-                AccountType      = "depository",
-                AccountSubtype   = "checking",
-                CurrentBalance   = 0m,
-                AvailableBalance = 0m,
-                IsoCurrencyCode  = "USD",
-                IsActive         = true,
-                LastSynced       = DateTime.Now,
-                DateLinked       = DateTime.Now
-            };
+            string accessToken = exchangeResponse.AccessToken;
+            string encryptedToken = tokenEncryptor.Encrypt(accessToken);
+
+            var accountsResponse = await plaidClient.AccountsGetAsync(
+                new AccountsGetRequest { AccessToken = accessToken });
 
             var manager = new PlaidAccountManager(options, logger);
-            Guid id     = await manager.InsertAsync(account, encryptedToken, rollback);
-            logger.LogInformation("Plaid account linked for user {UserId}: {AccountId}", userId, id);
-            return Ok(new Dictionary<string, string> { { "id", id.ToString() } });
+            var insertedIds = new List<string>();
+
+            foreach (var plaidAccount in accountsResponse.Accounts)
+            {
+                var account = new PlaidAccount
+                {
+                    UserId              = userId,
+                    SharedBudgetId      = sharedBudgetId,
+                    PlaidAccountId      = plaidAccount.AccountId,
+                    PlaidItemId         = exchangeResponse.ItemId,
+                    InstitutionName     = exchange.InstitutionName,
+                    InstitutionLogoUrl  = exchange.InstitutionLogoUrl,
+                    AccountName         = plaidAccount.Name,
+                    Mask                = plaidAccount.Mask ?? "0000",
+                    AccountType         = plaidAccount.Type.ToString(),
+                    AccountSubtype      = plaidAccount.Subtype?.ToString() ?? "checking",
+                    CurrentBalance      = plaidAccount.Balances.Current ?? 0m,
+                    AvailableBalance    = plaidAccount.Balances.Available ?? 0m,
+                    IsoCurrencyCode     = plaidAccount.Balances.IsoCurrencyCode ?? "USD",
+                    IsActive            = true,
+                    LastSynced          = DateTime.Now,
+                    DateLinked          = DateTime.Now
+                };
+
+                Guid id = await manager.InsertAsync(account, encryptedToken, rollback);
+                insertedIds.Add(id.ToString());
+            }
+
+            logger.LogInformation(
+                "Plaid item linked for user {UserId}: {Count} account(s)", userId, insertedIds.Count);
+            return Ok(new Dictionary<string, string> { { "id", insertedIds.FirstOrDefault() ?? "" } });
         }
         catch (Exception ex)
         {
+            logger.LogError(ex, "Failed to exchange Plaid public token for user {UserId}", userId);
+            return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+        }
+    }
+
+    /// <summary>
+    /// Pulls real transactions from Plaid via /transactions/sync (cursor-based) for the Item
+    /// backing this account, upserts them, and advances the stored cursor.
+    /// </summary>
+    [Authorize]
+    [HttpPost("sync/{accountId}/{rollback?}")]
+    public async Task<ActionResult> Sync(Guid accountId, bool rollback = false)
+    {
+        try
+        {
+            int newCount = await syncService.SyncAsync(accountId, rollback);
+            return Ok(new Dictionary<string, string> { { "newcount", newCount.ToString() } });
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Failed to sync transactions for account {AccountId}", accountId);
             return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
         }
     }

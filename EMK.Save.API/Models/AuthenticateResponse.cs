@@ -6,6 +6,9 @@ public class AuthenticateResponse
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string UserId { get; set; }
+    public string Email { get; set; }
+    public Guid? SharedBudgetId { get; set; }
+    public EMK.Save.BL.Models.BudgetRole? BudgetRole { get; set; }
     public string Token { get; set; }
 
 
@@ -15,6 +18,9 @@ public class AuthenticateResponse
         FirstName = user.FirstName;
         LastName = user.LastName;
         UserId = user.UserId;
+        Email = user.Email;
+        SharedBudgetId = user.SharedBudgetId;
+        BudgetRole = user.BudgetRole;
         Token = token;
     }
 }

@@ -79,5 +79,53 @@ namespace EMK.Save.BL
             }
             catch (Exception) { throw; }
         }
+
+        /// <summary>Returns everything needed to run a Plaid /transactions/sync pass for this account's Item.</summary>
+        public SyncContext GetSyncContext(Guid accountId)
+        {
+            try
+            {
+                using var dc = new SaveEntities(options);
+                tblPlaidAccount row = dc.tblPlaidAccounts.Find(accountId)
+                                      ?? throw new Exception("Account not found.");
+                return new SyncContext(
+                    row.PlaidItemId, row.SharedBudgetId, row.UserId,
+                    row.SyncCursor, row.AccessTokenEncrypted);
+            }
+            catch (Exception) { throw; }
+        }
+
+        /// <summary>Maps Plaid's account_id (string) to our own PlaidAccount.Id (Guid) for every account under an Item.</summary>
+        public Dictionary<string, Guid> GetAccountIdMap(string plaidItemId)
+        {
+            try
+            {
+                using var dc = new SaveEntities(options);
+                return dc.tblPlaidAccounts
+                         .Where(a => a.PlaidItemId == plaidItemId)
+                         .ToDictionary(a => a.PlaidAccountId, a => a.Id);
+            }
+            catch (Exception) { throw; }
+        }
+
+        /// <summary>Persists the /transactions/sync cursor across every account under the given Item.</summary>
+        public async Task UpdateSyncCursorAsync(string plaidItemId, string cursor)
+        {
+            try
+            {
+                using var dc = new SaveEntities(options);
+                var rows = dc.tblPlaidAccounts.Where(a => a.PlaidItemId == plaidItemId).ToList();
+                foreach (var row in rows)
+                {
+                    row.SyncCursor = cursor;
+                    row.LastSynced = DateTime.Now;
+                }
+                dc.SaveChanges();
+            }
+            catch (Exception) { throw; }
+        }
     }
+
+    public record SyncContext(
+        string PlaidItemId, Guid SharedBudgetId, Guid UserId, string? SyncCursor, string EncryptedAccessToken);
 }

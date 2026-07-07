@@ -1,3 +1,6 @@
+using EMK.Save.API.Hubs;
+using Microsoft.AspNetCore.SignalR;
+
 namespace EMK.Save.API.Controllers;
 
 [Route("api/[controller]")]
@@ -6,12 +9,15 @@ public class PushNotificationController : ControllerBase
 {
     private readonly DbContextOptions<SaveEntities>    options;
     private readonly ILogger<PushNotificationController> logger;
+    private readonly IHubContext<SaveHub>              hub;
 
     public PushNotificationController(ILogger<PushNotificationController> logger,
-                                      DbContextOptions<SaveEntities>      options)
+                                      DbContextOptions<SaveEntities>      options,
+                                      IHubContext<SaveHub>                hub)
     {
         this.logger  = logger;
         this.options = options;
+        this.hub     = hub;
     }
 
     /// <summary>Returns all notifications for a user.</summary>
@@ -76,6 +82,11 @@ public class PushNotificationController : ControllerBase
                 request.SharedBudgetId, request.UserId,
                 request.CategoryId, request.CategoryName,
                 request.OverageAmount, rollback);
+
+            var notification = await manager.LoadByIdAsync(id);
+            await hub.Clients.Group(SaveHub.BudgetGroup(request.SharedBudgetId))
+                .SendAsync("NotificationReceived", notification);
+
             return Ok(new Dictionary<string, string> { { "id", id.ToString() } });
         }
         catch (Exception ex)
@@ -97,6 +108,11 @@ public class PushNotificationController : ControllerBase
                 request.SharedBudgetId, request.UserId,
                 request.TransactionId, request.MerchantName,
                 request.Amount, rollback);
+
+            var notification = await manager.LoadByIdAsync(id);
+            await hub.Clients.Group(SaveHub.BudgetGroup(request.SharedBudgetId))
+                .SendAsync("NotificationReceived", notification);
+
             return Ok(new Dictionary<string, string> { { "id", id.ToString() } });
         }
         catch (Exception ex)

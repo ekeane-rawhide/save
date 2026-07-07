@@ -3,6 +3,7 @@ namespace EMK.Save.API.Services;
 public interface IUserService
 {
     AuthenticateResponse? Authenticate(AuthenticateRequest model);
+    Task<AuthenticateResponse> RegisterAsync(RegisterRequest model);
     Task<IEnumerable<User>> GetAllAsync();
     Task<User> GetByIdAsync(Guid id);
 }
@@ -27,14 +28,37 @@ public class UserService : IUserService
         var user = new UserManager(_dbOptions)
                        .LoadAsync()
                        .Result
-                       .SingleOrDefault(u => u.UserId   == model.UserId
-                                          && u.Password == UserManager.GetHash(model.Password));
+                       .SingleOrDefault(u => u.UserId == model.UserId);
 
-        if (user == null) return null;
+        if (user == null || !UserManager.VerifyPassword(model.Password, user.Password)) return null;
 
         string token = GenerateJwtToken(user);
         _logger.LogInformation("Authentication successful for {UserId}", model.UserId);
         return new AuthenticateResponse(user, token);
+    }
+
+    public async Task<AuthenticateResponse> RegisterAsync(RegisterRequest model)
+    {
+        var manager = new UserManager(_dbOptions);
+
+        var user = new User
+        {
+            UserId         = model.UserId,
+            Password       = model.Password,
+            FirstName      = model.FirstName,
+            LastName       = model.LastName,
+            Email          = model.Email,
+            TimeZone       = model.TimeZone,
+            CurrencyCode   = model.CurrencyCode,
+            DateRegistered = DateTime.Now
+        };
+
+        Guid id = await manager.InsertAsync(user);
+        var created = await manager.LoadByIdAsync(id);
+
+        string token = GenerateJwtToken(created);
+        _logger.LogInformation("Registration successful for {UserId}", model.UserId);
+        return new AuthenticateResponse(created, token);
     }
 
     public async Task<IEnumerable<User>> GetAllAsync()

@@ -18,6 +18,12 @@ public class Program
         builder.Services.Configure<AppSettings>(
             builder.Configuration.GetSection("AppSettings"));
 
+        // ── Plaid ─────────────────────────────────────────────────────────────
+        builder.Services.AddPlaid(builder.Configuration.GetSection("Plaid"));
+        builder.Services.Configure<EncryptionSettings>(
+            builder.Configuration.GetSection("Encryption"));
+        builder.Services.AddSingleton<ITokenEncryptor, TokenEncryptor>();
+
         // ── DI ────────────────────────────────────────────────────────────────
         builder.Services.AddScoped<IUserService, UserService>();
 
@@ -42,6 +48,9 @@ public class Program
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+
+        // ── SignalR — real-time push for the React PWA ────────────────────────
+        builder.Services.AddSignalR();
 
         // ── Logging ───────────────────────────────────────────────────────────
         builder.Services
@@ -71,6 +80,7 @@ public class Program
         app.UseAuthorization();
 
         app.MapControllers();
+        app.MapHub<EMK.Save.API.Hubs.SaveHub>("/hubs/save");
 
         app.Run();
     }

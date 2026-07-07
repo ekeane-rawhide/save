@@ -34,6 +34,22 @@ public class UserController : GenericController<User, UserManager>
         return Ok(response);
     }
 
+    /// <summary>Creates a new account and returns a JWT token (auto-login on signup).</summary>
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] RegisterRequest model)
+    {
+        try
+        {
+            var response = await _userService.RegisterAsync(model);
+            return Ok(response);
+        }
+        catch (Exception ex)
+        {
+            logger.LogWarning("Registration failed for {UserId}: {Message}", model.UserId, ex.Message);
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
     [Authorize]
     [HttpGet("GetAll")]
     public async Task<IActionResult> GetAll()
