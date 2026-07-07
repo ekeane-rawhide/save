@@ -19,6 +19,7 @@ public class UserController : GenericController<User, UserManager>
     }
 
     /// <summary>Authenticates a user and returns a JWT token.</summary>
+    [EnableRateLimiting("auth")]
     [HttpPost("authenticate")]
     public IActionResult Authenticate([FromBody] AuthenticateRequest model)
     {
@@ -35,6 +36,7 @@ public class UserController : GenericController<User, UserManager>
     }
 
     /// <summary>Creates a new account and returns a JWT token (auto-login on signup).</summary>
+    [EnableRateLimiting("auth")]
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequest model)
     {

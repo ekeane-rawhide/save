@@ -45,3 +45,18 @@ export function useUnlinkAccount() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['accounts'] }),
   })
 }
+
+export function useSyncAccount() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (accountId: string) => {
+      const result = await apiClient.post<{ newcount: string }>(`PlaidAccount/sync/${accountId}`)
+      return parseInt(result.newcount, 10)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['accounts'] })
+      queryClient.invalidateQueries({ queryKey: ['transactions'] })
+      queryClient.invalidateQueries({ queryKey: ['dashboard'] })
+    },
+  })
+}

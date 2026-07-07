@@ -9,6 +9,7 @@ global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Infrastructure;
 global using Microsoft.Extensions.Options;
 global using Microsoft.IdentityModel.Tokens;
+global using Microsoft.AspNetCore.RateLimiting;
 
 global using System.IdentityModel.Tokens.Jwt;
 global using System.Security.Claims;

@@ -1,0 +1,60 @@
+# Reference self-hosted deployment for the full stack (SQL Server + API + PWA).
+#
+# Usage:
+#   cp .env.example .env   # then fill in real secrets — docker compose auto-loads .env
+#   docker compose up --build
+#
+# The PWA talks to the API from the *browser*, not container-to-container, so
+# VITE_API_URL/VITE_HUB_URL below point at localhost — adjust for your real domain
+# when deploying somewhere with a public API hostname.
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${SA_PASSWORD}
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -Q 'SELECT 1' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  api:
+    build:
+      context: .
+      dockerfile: EMK.Save.API/Dockerfile
+    environment:
+      ConnectionStrings__DefaultConnection: "Server=sqlserver;Database=EMK.Save.DB;User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=True"
+      AppSettings__Secret: ${JWT_SECRET}
+      Plaid__ClientId: ${PLAID_CLIENT_ID}
+      Plaid__Secret: ${PLAID_SECRET}
+      Plaid__Environment: ${PLAID_ENVIRONMENT:-Sandbox}
+      Plaid__WebhookUrl: ${PLAID_WEBHOOK_URL:-}
+      Encryption__PlaidTokenKey: ${PLAID_TOKEN_ENCRYPTION_KEY}
+      AllowedOrigins: "http://localhost:8080"
+    ports:
+      - "5021:8080"
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+
+  pwa:
+    build:
+      context: .
+      dockerfile: EMK.Save.PWA/Dockerfile
+      args:
+        VITE_API_URL: "http://localhost:5021/api"
+        VITE_HUB_URL: "http://localhost:5021/hubs/save"
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+
+volumes:
+  sqlserver-data:

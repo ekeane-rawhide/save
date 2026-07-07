@@ -9,6 +9,7 @@ import { AuthProvider } from '@/context/AuthContext'
 import { RealtimeProvider } from '@/context/RealtimeContext'
 import { ThemeProvider } from '@/context/ThemeContext'
 import { ToastProvider } from '@/context/ToastContext'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
 
 registerSW({ immediate: true })
 
@@ -20,18 +21,20 @@ const queryClient = new QueryClient({
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ThemeProvider>
-      <QueryClientProvider client={queryClient}>
-        <ToastProvider>
-          <AuthProvider>
-            <RealtimeProvider>
-              <BrowserRouter>
-                <App />
-              </BrowserRouter>
-            </RealtimeProvider>
-          </AuthProvider>
-        </ToastProvider>
-      </QueryClientProvider>
-    </ThemeProvider>
+    <ErrorBoundary>
+      <ThemeProvider>
+        <QueryClientProvider client={queryClient}>
+          <ToastProvider>
+            <AuthProvider>
+              <RealtimeProvider>
+                <BrowserRouter>
+                  <App />
+                </BrowserRouter>
+              </RealtimeProvider>
+            </AuthProvider>
+          </ToastProvider>
+        </QueryClientProvider>
+      </ThemeProvider>
+    </ErrorBoundary>
   </StrictMode>,
 )

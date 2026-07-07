@@ -14,18 +14,21 @@ public class PlaidAccountController : ControllerBase
     private readonly PlaidClient                     plaidClient;
     private readonly ITokenEncryptor                 tokenEncryptor;
     private readonly IPlaidSyncService               syncService;
+    private readonly IConfiguration                  configuration;
 
     public PlaidAccountController(ILogger<PlaidAccountController> logger,
                                   DbContextOptions<SaveEntities>  options,
                                   PlaidClient                     plaidClient,
                                   ITokenEncryptor                 tokenEncryptor,
-                                  IPlaidSyncService               syncService)
+                                  IPlaidSyncService               syncService,
+                                  IConfiguration                  configuration)
     {
         this.logger         = logger;
         this.options        = options;
         this.plaidClient    = plaidClient;
         this.tokenEncryptor = tokenEncryptor;
         this.syncService    = syncService;
+        this.configuration  = configuration;
     }
 
     /// <summary>Returns all active linked accounts for a SharedBudget.</summary>
@@ -40,7 +43,8 @@ public class PlaidAccountController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            logger.LogError(ex, "Unhandled error");
+            return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An unexpected error occurred." });
         }
     }
 
@@ -55,7 +59,8 @@ public class PlaidAccountController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            logger.LogError(ex, "Unhandled error");
+            return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An unexpected error occurred." });
         }
     }
 
@@ -66,6 +71,8 @@ public class PlaidAccountController : ControllerBase
     {
         try
         {
+            string? webhookUrl = configuration["Plaid:WebhookUrl"];
+
             var request = new LinkTokenCreateRequest
             {
                 User = new LinkTokenCreateRequestUser { ClientUserId = userId.ToString() },
@@ -73,6 +80,7 @@ public class PlaidAccountController : ControllerBase
                 Products = [Products.Transactions],
                 CountryCodes = [CountryCode.Us],
                 Language = Language.English,
+                Webhook = string.IsNullOrWhiteSpace(webhookUrl) ? null : webhookUrl,
             };
 
             var response = await plaidClient.LinkTokenCreateAsync(request);
@@ -89,7 +97,8 @@ public class PlaidAccountController : ControllerBase
         catch (Exception ex)
         {
             logger.LogError(ex, "Failed to create Plaid link token for user {UserId}", userId);
-            return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            logger.LogError(ex, "Unhandled error");
+            return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An unexpected error occurred." });
         }
     }
 
@@ -151,7 +160,8 @@ public class PlaidAccountController : ControllerBase
         catch (Exception ex)
         {
             logger.LogError(ex, "Failed to exchange Plaid public token for user {UserId}", userId);
-            return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            logger.LogError(ex, "Unhandled error");
+            return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An unexpected error occurred." });
         }
     }
 
@@ -171,7 +181,8 @@ public class PlaidAccountController : ControllerBase
         catch (Exception ex)
         {
             logger.LogError(ex, "Failed to sync transactions for account {AccountId}", accountId);
-            return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            logger.LogError(ex, "Unhandled error");
+            return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An unexpected error occurred." });
         }
     }
 
@@ -187,7 +198,8 @@ public class PlaidAccountController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            logger.LogError(ex, "Unhandled error");
+            return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An unexpected error occurred." });
         }
     }
 
@@ -203,7 +215,8 @@ public class PlaidAccountController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            logger.LogError(ex, "Unhandled error");
+            return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An unexpected error occurred." });
         }
     }
 }

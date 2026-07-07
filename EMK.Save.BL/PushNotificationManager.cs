@@ -162,6 +162,42 @@ namespace EMK.Save.BL
             catch (Exception) { throw; }
         }
 
+        public async Task<Guid> QueueAccountErrorNotificationAsync(
+            Guid sharedBudgetId, Guid userId, string institutionName, bool rollback = false)
+        {
+            try
+            {
+                tblNotificationPreference? pref = GetPreference(userId);
+                if (pref == null || !pref.NotifyOnSyncError || !pref.IsPushEnabled)
+                    return Guid.Empty;
+
+                tblPushNotification n = new tblPushNotification
+                {
+                    Id               = Guid.NewGuid(),
+                    SharedBudgetId   = sharedBudgetId,
+                    UserId           = userId,
+                    NotificationType = (int)NotificationType.AccountSyncError,
+                    Title            = $"{institutionName} needs attention",
+                    Body             = $"We couldn't sync {institutionName} — please reconnect this account.",
+                    Icon             = "/icons/icon-192.png",
+                    ActionUrl        = "/accounts",
+                    PushEndpoint     = pref.PushEndpoint,
+                    ScheduledFor     = DateTime.Now,
+                    Status           = (int)NotificationStatus.Pending,
+                    IsRead           = false,
+                    ErrorMessage     = string.Empty
+                };
+
+                using var dc = new SaveEntities(options);
+                IDbContextTransaction? txn = rollback ? dc.Database.BeginTransaction() : null;
+                dc.tblPushNotifications.Add(n);
+                dc.SaveChanges();
+                txn?.Rollback();
+                return n.Id;
+            }
+            catch (Exception) { throw; }
+        }
+
         // ── Private helpers ───────────────────────────────────────────────────
         private tblNotificationPreference? GetPreference(Guid userId)
         {

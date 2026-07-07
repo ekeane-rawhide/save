@@ -108,6 +108,19 @@ namespace EMK.Save.BL
             catch (Exception) { throw; }
         }
 
+        /// <summary>Returns every linked account under a given Item (e.g. to notify affected users on ITEM_ERROR).</summary>
+        public async Task<List<PlaidAccount>> LoadByItemAsync(string plaidItemId)
+        {
+            try
+            {
+                var rows = new List<PlaidAccount>();
+                (await base.LoadAsync(e => e.PlaidItemId == plaidItemId))
+                    .ForEach(e => rows.Add(Map<tblPlaidAccount, PlaidAccount>(e)));
+                return rows;
+            }
+            catch (Exception) { throw; }
+        }
+
         /// <summary>Persists the /transactions/sync cursor across every account under the given Item.</summary>
         public async Task UpdateSyncCursorAsync(string plaidItemId, string cursor)
         {
