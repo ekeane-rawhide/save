@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="EMK.Save.API/EMK.Save.API.csproj" Id="3479f7b3-bd62-40e5-9c58-359ad1f55607" />
   <Project Path="EMK.Save.BL.Models/EMK.Save.BL.Models.csproj" />
   <Project Path="EMK.Save.BL/EMK.Save.BL.csproj" />
   <Project Path="EMK.Save.MigrationHandler/EMK.Save.MigrationHandler.csproj" />

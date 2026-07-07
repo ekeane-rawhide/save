@@ -1,0 +1,43 @@
+namespace EMK.Save.API.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class UserController : GenericController<User, UserManager>
+{
+    private readonly IUserService                    _userService;
+    private new readonly ILogger<UserController>     logger;
+    private new readonly DbContextOptions<SaveEntities> options;
+
+    public UserController(IUserService                       userService,
+                          ILogger<UserController>            logger,
+                          DbContextOptions<SaveEntities>     options)
+        : base(logger, options)
+    {
+        _userService  = userService;
+        this.logger   = logger;
+        this.options  = options;
+    }
+
+    /// <summary>Authenticates a user and returns a JWT token.</summary>
+    [HttpPost("authenticate")]
+    public IActionResult Authenticate([FromBody] AuthenticateRequest model)
+    {
+        var response = _userService.Authenticate(model);
+
+        if (response == null)
+        {
+            logger.LogWarning("Authentication failed for {UserId}", model.UserId);
+            return BadRequest(new { message = "Username or password is incorrect." });
+        }
+
+        logger.LogInformation("Authentication successful for {UserId}", model.UserId);
+        return Ok(response);
+    }
+
+    [Authorize]
+    [HttpGet("GetAll")]
+    public async Task<IActionResult> GetAll()
+    {
+        return Ok(await _userService.GetAllAsync());
+    }
+}
