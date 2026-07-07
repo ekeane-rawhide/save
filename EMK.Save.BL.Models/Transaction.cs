@@ -1,13 +1,5 @@
-
-using System.ComponentModel.DataAnnotations;
-
 namespace EMK.Save.BL.Models
 {
-    /// <summary>
-    /// A single bank transaction pulled from Plaid.
-    /// Can be assigned to a BudgetCategory by the user.
-    /// Maps to tblTransaction in the PL.
-    /// </summary>
     public class Transaction
     {
         public Guid Id { get; set; }
@@ -18,7 +10,9 @@ namespace EMK.Save.BL.Models
         [DisplayName("Account Name")]
         public string AccountDisplayName { get; set; } = string.Empty;
 
-        /// <summary>Plaid's stable transaction_id – used to prevent duplicate imports.</summary>
+        [DisplayName("Shared Budget")]
+        public Guid SharedBudgetId { get; set; }
+
         [DisplayName("Plaid Transaction ID")]
         public string PlaidTransactionId { get; set; } = string.Empty;
 
@@ -36,10 +30,7 @@ namespace EMK.Save.BL.Models
         [DisplayName("Description")]
         public string Description { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Negative = debit/expense.  Positive = credit/income.
-        /// Stored exactly as Plaid returns it.
-        /// </summary>
+        /// <summary>Negative = expense/debit.  Positive = income/credit.</summary>
         [DisplayName("Amount")]
         [DisplayFormat(DataFormatString = "{0:C}")]
         public decimal Amount { get; set; }
@@ -47,15 +38,12 @@ namespace EMK.Save.BL.Models
         [DisplayName("Currency")]
         public string IsoCurrencyCode { get; set; } = "USD";
 
-        /// <summary>Plaid's primary category string (e.g. "Food and Drink").</summary>
         [DisplayName("Plaid Category")]
         public string PlaidCategory { get; set; } = string.Empty;
 
-        /// <summary>Plaid's detailed category string (e.g. "Restaurants").</summary>
         [DisplayName("Plaid Subcategory")]
         public string PlaidSubcategory { get; set; } = string.Empty;
 
-        // ── User assignment ──────────────────────────────────────────────────
         [DisplayName("Budget Category")]
         public Guid? CategoryId { get; set; }
 
@@ -72,7 +60,7 @@ namespace EMK.Save.BL.Models
         public string Notes { get; set; } = string.Empty;
 
         [DisplayName("Is Excluded")]
-        public bool IsExcluded { get; set; }       // e.g. transfers, splits
+        public bool IsExcluded { get; set; }
 
         [DisplayName("Is Pending")]
         public bool IsPending { get; set; }
@@ -95,13 +83,10 @@ namespace EMK.Save.BL.Models
         public string DisplayName =>
             !string.IsNullOrWhiteSpace(MerchantName) ? MerchantName : Description;
 
-        [DisplayName("Month")]
-        public int Month => TransactionDate.Month;
-
-        [DisplayName("Year")]
-        public int Year => TransactionDate.Year;
-
         [DisplayName("Assigned")]
         public bool IsAssigned => CategoryId.HasValue && CategoryId != Guid.Empty;
+
+        public int Month => TransactionDate.Month;
+        public int Year  => TransactionDate.Year;
     }
 }

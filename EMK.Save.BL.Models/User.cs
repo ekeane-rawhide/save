@@ -1,17 +1,11 @@
-
-
 namespace EMK.Save.BL.Models
 {
-    /// <summary>
-    /// Application user.  Mirrors the DVDCentral User pattern.
-    /// Maps to tblUser in the PL.
-    /// </summary>
     public class User
     {
         public Guid Id { get; set; }
 
         [DisplayName("Username")]
-        public string UserId { get; set; } = string.Empty;      // login handle
+        public string UserId { get; set; } = string.Empty;
 
         [DisplayName("First Name")]
         public string FirstName { get; set; } = string.Empty;
@@ -22,7 +16,7 @@ namespace EMK.Save.BL.Models
         [DisplayName("Email")]
         public string Email { get; set; } = string.Empty;
 
-        public string Password { get; set; } = string.Empty;    // stored as SHA-1 hash
+        public string Password { get; set; } = string.Empty;
 
         [DisplayName("Time Zone")]
         public string TimeZone { get; set; } = "America/Chicago";
@@ -36,6 +30,18 @@ namespace EMK.Save.BL.Models
         [DisplayName("Last Login")]
         public DateTime? LastLogin { get; set; }
 
+        // ── Budget membership ─────────────────────────────────────────────────
+        /// <summary>
+        /// Null  = user has not yet created or joined a shared budget.
+        /// HasValue = the SharedBudget this user belongs to.
+        /// A user can belong to at most one SharedBudget (owner OR member).
+        /// </summary>
+        [DisplayName("Shared Budget")]
+        public Guid? SharedBudgetId { get; set; }
+
+        [DisplayName("Budget Role")]
+        public BudgetRole? BudgetRole { get; set; }
+
         // ── Computed ─────────────────────────────────────────────────────────
         [DisplayName("Full Name")]
         public string FullName => $"{FirstName} {LastName}".Trim();
@@ -43,5 +49,11 @@ namespace EMK.Save.BL.Models
         [DisplayName("Initials")]
         public string Initials =>
             $"{(FirstName.Length > 0 ? FirstName[0] : ' ')}{(LastName.Length > 0 ? LastName[0] : ' ')}".Trim().ToUpper();
+
+        [DisplayName("Has Budget")]
+        public bool HasBudget => SharedBudgetId.HasValue;
+
+        [DisplayName("Is Owner")]
+        public bool IsOwner => BudgetRole == Models.BudgetRole.Owner;
     }
 }
