@@ -24,7 +24,9 @@ namespace EMK.Save.BL
             {
                 tblUser row = Map<User, tblUser>(user);
                 row.Password = GetHash(user.Password);
-                return await base.InsertAsync(row, e => e.UserId == user.UserId, rollback);
+                return await base.InsertAsync(row,
+                    e => e.UserId == user.UserId,
+                    rollback);
             }
             catch (Exception) { throw; }
         }
@@ -34,7 +36,7 @@ namespace EMK.Save.BL
             try
             {
                 tblUser row = Map<User, tblUser>(user);
-                return await base.UpdateAsync(row, e => e.UserId == user.UserId, rollback);
+                return await base.UpdateAsync(row, null, rollback);
             }
             catch (Exception) { throw; }
         }
@@ -44,19 +46,27 @@ namespace EMK.Save.BL
             try
             {
                 var rows = new List<User>();
-                (await base.LoadAsync()).ForEach(e => rows.Add(Map<tblUser, User>(e)));
+                (await base.LoadAsync())
+                    .ForEach(e =>
+                    {
+                        var u = Map<tblUser, User>(e);
+                        u.BudgetRole = e.BudgetRole.HasValue ? (BudgetRole?)e.BudgetRole.Value : null;
+                        rows.Add(u);
+                    });
                 return rows;
             }
             catch (Exception) { throw; }
         }
 
-        public async Task<User> LoadByIdAsync(Guid id)
+        public new async Task<User> LoadByIdAsync(Guid id)
         {
             try
             {
                 var row = (await base.LoadAsync(e => e.Id == id)).FirstOrDefault()
                           ?? throw new Exception("User not found.");
-                return Map<tblUser, User>(row);
+                var u = Map<tblUser, User>(row);
+                u.BudgetRole = row.BudgetRole.HasValue ? (BudgetRole?)row.BudgetRole.Value : null;
+                return u;
             }
             catch (Exception) { throw; }
         }
@@ -65,16 +75,17 @@ namespace EMK.Save.BL
         {
             try
             {
-                using var dc = new SaveEntities(options);
-                var hashed = GetHash(password);
-                var row    = dc.tblUsers.FirstOrDefault(u => u.UserId == userId && u.Password == hashed)
-                             ?? throw new LoginFailureException();
-
-                // stamp last login
-                row.LastLogin = DateTime.Now;
+                using var dc    = new SaveEntities(options);
+                string hashed   = GetHash(password);
+                tblUser row     = dc.tblUsers
+                                    .FirstOrDefault(u => u.UserId == userId && u.Password == hashed)
+                                  ?? throw new LoginFailureException();
+                row.LastLogin   = DateTime.Now;
                 dc.SaveChanges();
 
-                return Map<tblUser, User>(row);
+                var u = Map<tblUser, User>(row);
+                u.BudgetRole = row.BudgetRole.HasValue ? (BudgetRole?)row.BudgetRole.Value : null;
+                return u;
             }
             catch (Exception) { throw; }
         }

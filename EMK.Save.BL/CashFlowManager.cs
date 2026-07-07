@@ -24,35 +24,37 @@ namespace EMK.Save.BL
             catch (Exception) { throw; }
         }
 
-        public async Task<List<CashFlowEntry>> LoadAsync(Guid userId, int month, int year)
+        public async Task<List<CashFlowEntry>> LoadAsync(Guid sharedBudgetId, int month, int year)
         {
             try
             {
                 var rows = new List<CashFlowEntry>();
-                (await base.LoadAsync(e =>
-                    e.UserId == userId
-                    && e.EntryDate.Month == month
-                    && e.EntryDate.Year  == year))
-                .OrderBy(e => e.EntryDate)
-                .ToList()
-                .ForEach(e => rows.Add(Map<tblCashFlowEntry, CashFlowEntry>(e)));
+
+                (await base.LoadAsync(e => e.SharedBudgetId    == sharedBudgetId
+                                        && e.EntryDate.Month   == month
+                                        && e.EntryDate.Year    == year))
+                    .OrderBy(e => e.EntryDate)
+                    .ToList()
+                    .ForEach(e => rows.Add(Map<tblCashFlowEntry, CashFlowEntry>(e)));
+
                 return rows;
             }
             catch (Exception) { throw; }
         }
 
         /// <summary>
-        /// Rebuilds daily cash-flow entries for the given month from live transaction data.
-        /// Projects remaining days using average daily spend.
+        /// Rebuilds daily cash-flow entries for the month from live transactions.
+        /// Future days are projected using average daily spend from past days.
         /// </summary>
-        public async Task<List<CashFlowEntry>> BuildCashFlowAsync(Guid userId, int month, int year)
+        public async Task<List<CashFlowEntry>> BuildCashFlowAsync(
+            Guid sharedBudgetId, int month, int year)
         {
             try
             {
                 using var dc = new SaveEntities(options);
 
                 var transactions = dc.tblTransactions
-                    .Where(t => t.PlaidAccount.UserId == userId
+                    .Where(t => t.SharedBudgetId       == sharedBudgetId
                              && t.TransactionDate.Month == month
                              && t.TransactionDate.Year  == year
                              && !t.IsExcluded
@@ -60,7 +62,6 @@ namespace EMK.Save.BL
                     .OrderBy(t => t.TransactionDate)
                     .ToList();
 
-                // Group by day
                 var grouped = transactions
                     .GroupBy(t => t.TransactionDate.Date)
                     .ToDictionary(
@@ -68,41 +69,37 @@ namespace EMK.Save.BL
                         g => (
                             income:   g.Where(t => t.Amount > 0).Sum(t => t.Amount),
                             expenses: g.Where(t => t.Amount < 0).Sum(t => Math.Abs(t.Amount)),
-                            count:    g.Count()
-                        ));
+                            count:    g.Count()));
 
-                // Starting balance: first account balance before the month
                 decimal startBalance = dc.tblPlaidAccounts
-                    .Where(a => a.UserId == userId && a.IsActive)
+                    .Where(a => a.SharedBudgetId == sharedBudgetId && a.IsActive)
                     .Sum(a => a.CurrentBalance);
 
-                int daysInMonth = DateTime.DaysInMonth(year, month);
-                var entries     = new List<CashFlowEntry>();
+                DateTime today      = DateTime.Today;
+                int      daysInMonth = DateTime.DaysInMonth(year, month);
+
+                decimal avgDailySpend = grouped
+                    .Where(g => g.Key.Date <= today.Date)
+                    .Select(g => g.Value.expenses)
+                    .DefaultIfEmpty(0m)
+                    .Average();
+
+                // Remove stale entries
+                dc.tblCashFlowEntries.RemoveRange(
+                    dc.tblCashFlowEntries.Where(e => e.SharedBudgetId    == sharedBudgetId
+                                                  && e.EntryDate.Month   == month
+                                                  && e.EntryDate.Year    == year));
+
+                var entries = new List<CashFlowEntry>();
                 decimal running = startBalance;
-                today: DateTime today = DateTime.Today;
-
-                // Average daily spend for projection (past days only)
-                var pastDays = grouped.Where(g => g.Key.Date <= today.Date).ToList();
-                decimal avgDailySpend = pastDays.Count > 0
-                    ? pastDays.Average(g => g.Value.expenses)
-                    : 0m;
-
-                // Remove existing entries for the month
-                var oldEntries = dc.tblCashFlowEntries
-                    .Where(e => e.UserId == userId
-                             && e.EntryDate.Month == month
-                             && e.EntryDate.Year  == year)
-                    .ToList();
-                dc.tblCashFlowEntries.RemoveRange(oldEntries);
 
                 for (int day = 1; day <= daysInMonth; day++)
                 {
-                    var date    = new DateTime(year, month, day);
-                    bool isFuture = date.Date > today.Date;
+                    DateTime date     = new DateTime(year, month, day);
+                    bool     isFuture = date.Date > today.Date;
 
-                    decimal dayIncome   = 0m;
-                    decimal dayExpenses = 0m;
-                    int     count       = 0;
+                    decimal dayIncome = 0m, dayExpenses = 0m;
+                    int     count     = 0;
 
                     if (!isFuture && grouped.TryGetValue(date, out var g))
                     {
@@ -113,13 +110,13 @@ namespace EMK.Save.BL
                     }
 
                     decimal projected = isFuture
-                        ? running - (avgDailySpend * (day - today.Day))
+                        ? running - avgDailySpend * (day - today.Day)
                         : running;
 
-                    var entry = new tblCashFlowEntry
+                    var row = new tblCashFlowEntry
                     {
                         Id               = Guid.NewGuid(),
-                        UserId           = userId,
+                        SharedBudgetId   = sharedBudgetId,
                         EntryDate        = date,
                         DayIncome        = dayIncome,
                         DayExpenses      = dayExpenses,
@@ -128,8 +125,8 @@ namespace EMK.Save.BL
                         TransactionCount = count
                     };
 
-                    dc.tblCashFlowEntries.Add(entry);
-                    entries.Add(Map<tblCashFlowEntry, CashFlowEntry>(entry));
+                    dc.tblCashFlowEntries.Add(row);
+                    entries.Add(Map<tblCashFlowEntry, CashFlowEntry>(row));
                 }
 
                 dc.SaveChanges();

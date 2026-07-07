@@ -28,70 +28,68 @@ namespace EMK.Save.BL
 
         /// <summary>
         /// Upserts a batch of Plaid transactions — insert new, update pending→posted.
-        /// Returns count of new rows inserted.
+        /// Returns count of newly inserted rows.
         /// </summary>
-        public async Task<int> UpsertFromPlaidAsync(List<Transaction> transactions, bool rollback = false)
+        public async Task<int> UpsertFromPlaidAsync(
+            List<Transaction> transactions, bool rollback = false)
         {
             try
             {
                 int newCount = 0;
                 using var dc = new SaveEntities(options);
-                IDbContextTransaction? txn = null;
-                if (rollback) txn = dc.Database.BeginTransaction();
+                IDbContextTransaction? txn = rollback ? dc.Database.BeginTransaction() : null;
 
-                foreach (var t in transactions)
+                foreach (Transaction t in transactions)
                 {
-                    var existing = dc.tblTransactions
+                    tblTransaction? existing = dc.tblTransactions
                         .FirstOrDefault(r => r.PlaidTransactionId == t.PlaidTransactionId);
 
                     if (existing == null)
                     {
-                        var row = Map<Transaction, tblTransaction>(t);
+                        tblTransaction row = Map<Transaction, tblTransaction>(t);
                         row.Id = Guid.NewGuid();
                         dc.tblTransactions.Add(row);
                         newCount++;
                     }
                     else
                     {
-                        // Update pending → posted status and amount
-                        existing.IsPending       = t.IsPending;
-                        existing.PostedDate       = t.PostedDate;
-                        existing.Amount           = t.Amount;
-                        existing.MerchantName     = t.MerchantName;
+                        existing.IsPending    = t.IsPending;
+                        existing.PostedDate   = t.PostedDate;
+                        existing.Amount       = t.Amount;
+                        existing.MerchantName = t.MerchantName;
                     }
                 }
 
                 dc.SaveChanges();
-                if (rollback) txn?.Rollback();
+                txn?.Rollback();
                 return newCount;
             }
             catch (Exception) { throw; }
         }
 
-        /// <summary>Assigns a transaction to a budget category.</summary>
-        public async Task<int> AssignCategoryAsync(Guid transactionId, Guid? categoryId, bool rollback = false)
+        /// <summary>Assigns (or clears) a budget category on a transaction and marks it reviewed.</summary>
+        public async Task<int> AssignCategoryAsync(
+            Guid transactionId, Guid? categoryId, bool rollback = false)
         {
             try
             {
                 using var dc = new SaveEntities(options);
-                IDbContextTransaction? txn = null;
-                if (rollback) txn = dc.Database.BeginTransaction();
+                IDbContextTransaction? txn = rollback ? dc.Database.BeginTransaction() : null;
 
-                var row = dc.tblTransactions.FirstOrDefault(t => t.Id == transactionId)
-                          ?? throw new Exception("Transaction not found.");
+                tblTransaction row = dc.tblTransactions.Find(transactionId)
+                                     ?? throw new Exception("Transaction not found.");
+                row.CategoryId = categoryId;
+                row.IsReviewed = true;
 
-                row.CategoryId  = categoryId;
-                row.IsReviewed  = true;
-                var result      = dc.SaveChanges();
-
-                if (rollback) txn?.Rollback();
+                int result = dc.SaveChanges();
+                txn?.Rollback();
                 return result;
             }
             catch (Exception) { throw; }
         }
 
         public async Task<List<Transaction>> LoadAsync(
-            Guid userId, int month, int year, bool unassignedOnly = false)
+            Guid sharedBudgetId, int month, int year, bool unassignedOnly = false)
         {
             try
             {
@@ -101,11 +99,10 @@ namespace EMK.Save.BL
                     x => x.Category!
                 ];
 
-                // Filter: transactions belonging to accounts of this user, in the month/year
                 var rows = new List<Transaction>();
 
                 (await base.LoadAsync(
-                    t => t.PlaidAccount.UserId == userId
+                    t => t.SharedBudgetId       == sharedBudgetId
                       && t.TransactionDate.Month == month
                       && t.TransactionDate.Year  == year
                       && (!unassignedOnly || t.CategoryId == null)
@@ -113,11 +110,11 @@ namespace EMK.Save.BL
                     includes))
                 .ForEach(t =>
                 {
-                    var tx = Map<tblTransaction, Transaction>(t);
-                    tx.AccountDisplayName = t.PlaidAccount.AccountName + " ••••" + t.PlaidAccount.Mask;
-                    tx.CategoryName       = t.Category?.Name   ?? string.Empty;
-                    tx.CategoryIcon       = t.Category?.Icon   ?? string.Empty;
-                    tx.CategoryColor      = t.Category?.Color  ?? string.Empty;
+                    Transaction tx            = Map<tblTransaction, Transaction>(t);
+                    tx.AccountDisplayName     = $"{t.PlaidAccount.AccountName} ••••{t.PlaidAccount.Mask}";
+                    tx.CategoryName           = t.Category?.Name  ?? string.Empty;
+                    tx.CategoryIcon           = t.Category?.Icon  ?? string.Empty;
+                    tx.CategoryColor          = t.Category?.Color ?? string.Empty;
                     rows.Add(tx);
                 });
 
@@ -126,7 +123,7 @@ namespace EMK.Save.BL
             catch (Exception) { throw; }
         }
 
-        public async Task<Transaction> LoadByIdAsync(Guid id)
+        public new async Task<Transaction> LoadByIdAsync(Guid id)
         {
             try
             {
@@ -136,11 +133,11 @@ namespace EMK.Save.BL
                     x => x.Category!
                 ];
 
-                var rows = await base.LoadAsync(e => e.Id == id, includes);
-                var t0   = rows.FirstOrDefault() ?? throw new Exception("Transaction not found.");
+                tblTransaction t0 = (await base.LoadAsync(e => e.Id == id, includes)).FirstOrDefault()
+                                    ?? throw new Exception("Transaction not found.");
 
-                var tx = Map<tblTransaction, Transaction>(t0);
-                tx.AccountDisplayName = t0.PlaidAccount.AccountName + " ••••" + t0.PlaidAccount.Mask;
+                Transaction tx        = Map<tblTransaction, Transaction>(t0);
+                tx.AccountDisplayName = $"{t0.PlaidAccount.AccountName} ••••{t0.PlaidAccount.Mask}";
                 tx.CategoryName       = t0.Category?.Name  ?? string.Empty;
                 tx.CategoryIcon       = t0.Category?.Icon  ?? string.Empty;
                 tx.CategoryColor      = t0.Category?.Color ?? string.Empty;

@@ -9,11 +9,10 @@ namespace EMK.Save.BL
             try
             {
                 tblPushNotification row = Map<PushNotification, tblPushNotification>(notification);
-                row.NotificationType = (int)notification.NotificationType;
-                row.Status           = (int)NotificationStatus.Pending;
-                row.ScheduledFor     = notification.ScheduledFor == default
-                    ? DateTime.Now
-                    : notification.ScheduledFor;
+                row.NotificationType    = (int)notification.NotificationType;
+                row.Status              = (int)NotificationStatus.Pending;
+                row.ScheduledFor        = notification.ScheduledFor == default
+                    ? DateTime.Now : notification.ScheduledFor;
                 return await base.InsertAsync(row, null, rollback);
             }
             catch (Exception) { throw; }
@@ -24,8 +23,8 @@ namespace EMK.Save.BL
             try
             {
                 tblPushNotification row = Map<PushNotification, tblPushNotification>(notification);
-                row.NotificationType = (int)notification.NotificationType;
-                row.Status           = (int)notification.Status;
+                row.NotificationType    = (int)notification.NotificationType;
+                row.Status              = (int)notification.Status;
                 return await base.UpdateAsync(row, null, rollback);
             }
             catch (Exception) { throw; }
@@ -40,16 +39,18 @@ namespace EMK.Save.BL
                     : e => e.UserId == userId;
 
                 var rows = new List<PushNotification>();
+
                 (await base.LoadAsync(filter))
                     .OrderByDescending(e => e.ScheduledFor)
                     .ToList()
                     .ForEach(e =>
                     {
-                        var n = Map<tblPushNotification, PushNotification>(e);
-                        n.NotificationType = (NotificationType)e.NotificationType;
-                        n.Status           = (NotificationStatus)e.Status;
+                        PushNotification n  = Map<tblPushNotification, PushNotification>(e);
+                        n.NotificationType  = (NotificationType)e.NotificationType;
+                        n.Status            = (NotificationStatus)e.Status;
                         rows.Add(n);
                     });
+
                 return rows;
             }
             catch (Exception) { throw; }
@@ -60,37 +61,39 @@ namespace EMK.Save.BL
             try
             {
                 using var dc = new SaveEntities(options);
-                IDbContextTransaction? txn = null;
-                if (rollback) txn = dc.Database.BeginTransaction();
+                IDbContextTransaction? txn = rollback ? dc.Database.BeginTransaction() : null;
 
-                var row = dc.tblPushNotifications.FirstOrDefault(n => n.Id == id)
-                          ?? throw new Exception("Notification not found.");
+                tblPushNotification row = dc.tblPushNotifications.Find(id)
+                                          ?? throw new Exception("Notification not found.");
                 row.IsRead = true;
-                var result = dc.SaveChanges();
-                if (rollback) txn?.Rollback();
+
+                int result = dc.SaveChanges();
+                txn?.Rollback();
                 return result;
             }
             catch (Exception) { throw; }
         }
 
-        /// <summary>
-        /// Creates and queues a budget-overage push notification.
-        /// Called by TrackingInsightManager after generating insights.
-        /// </summary>
+        // ── Queue helpers ─────────────────────────────────────────────────────
+
         public async Task<Guid> QueueOverageNotificationAsync(
-            Guid userId, Guid categoryId, string categoryName, decimal overageAmount, bool rollback = false)
+            Guid sharedBudgetId, Guid userId,
+            Guid categoryId, string categoryName, decimal overageAmount,
+            bool rollback = false)
         {
             try
             {
-                var pref = await GetPreferenceAsync(userId);
-                if (pref == null || !pref.NotifyOnBudgetOverage || !pref.IsPushEnabled)
+                tblNotificationPreference? pref = GetPreference(userId);
+                if (pref == null
+                 || !pref.NotifyOnBudgetOverage
+                 || !pref.IsPushEnabled
+                 || !IsOutsideQuietHours(pref))
                     return Guid.Empty;
 
-                if (!IsOutsideQuietHours(pref)) return Guid.Empty;
-
-                var n = new tblPushNotification
+                tblPushNotification n = new tblPushNotification
                 {
                     Id               = Guid.NewGuid(),
+                    SharedBudgetId   = sharedBudgetId,
                     UserId           = userId,
                     NotificationType = (int)NotificationType.BudgetOverage,
                     Title            = $"{categoryName} over budget!",
@@ -107,34 +110,33 @@ namespace EMK.Save.BL
                 };
 
                 using var dc = new SaveEntities(options);
-                IDbContextTransaction? txn = null;
-                if (rollback) txn = dc.Database.BeginTransaction();
+                IDbContextTransaction? txn = rollback ? dc.Database.BeginTransaction() : null;
                 dc.tblPushNotifications.Add(n);
                 dc.SaveChanges();
-                if (rollback) txn?.Rollback();
-
+                txn?.Rollback();
                 return n.Id;
             }
             catch (Exception) { throw; }
         }
 
-        /// <summary>
-        /// Creates and queues a new-transaction push notification.
-        /// </summary>
         public async Task<Guid> QueueTransactionNotificationAsync(
-            Guid userId, Guid transactionId, string merchantName, decimal amount, bool rollback = false)
+            Guid sharedBudgetId, Guid userId,
+            Guid transactionId, string merchantName, decimal amount,
+            bool rollback = false)
         {
             try
             {
-                var pref = await GetPreferenceAsync(userId);
-                if (pref == null || !pref.NotifyOnNewTransaction || !pref.IsPushEnabled)
+                tblNotificationPreference? pref = GetPreference(userId);
+                if (pref == null
+                 || !pref.NotifyOnNewTransaction
+                 || !pref.IsPushEnabled
+                 || !IsOutsideQuietHours(pref))
                     return Guid.Empty;
 
-                if (!IsOutsideQuietHours(pref)) return Guid.Empty;
-
-                var n = new tblPushNotification
+                tblPushNotification n = new tblPushNotification
                 {
                     Id               = Guid.NewGuid(),
+                    SharedBudgetId   = sharedBudgetId,
                     UserId           = userId,
                     NotificationType = (int)NotificationType.NewTransaction,
                     Title            = $"New transaction: {merchantName}",
@@ -151,19 +153,17 @@ namespace EMK.Save.BL
                 };
 
                 using var dc = new SaveEntities(options);
-                IDbContextTransaction? txn = null;
-                if (rollback) txn = dc.Database.BeginTransaction();
+                IDbContextTransaction? txn = rollback ? dc.Database.BeginTransaction() : null;
                 dc.tblPushNotifications.Add(n);
                 dc.SaveChanges();
-                if (rollback) txn?.Rollback();
-
+                txn?.Rollback();
                 return n.Id;
             }
             catch (Exception) { throw; }
         }
 
-        // ── Helpers ───────────────────────────────────────────────────────────
-        private async Task<tblNotificationPreference?> GetPreferenceAsync(Guid userId)
+        // ── Private helpers ───────────────────────────────────────────────────
+        private tblNotificationPreference? GetPreference(Guid userId)
         {
             using var dc = new SaveEntities(options);
             return dc.tblNotificationPreferences.FirstOrDefault(p => p.UserId == userId);
@@ -171,14 +171,12 @@ namespace EMK.Save.BL
 
         private static bool IsOutsideQuietHours(tblNotificationPreference pref)
         {
-            var now   = TimeOnly.FromDateTime(DateTime.Now);
-            var start = pref.QuietHoursStart;
-            var end   = pref.QuietHoursEnd;
+            TimeOnly now   = TimeOnly.FromDateTime(DateTime.Now);
+            TimeOnly start = pref.QuietHoursStart;
+            TimeOnly end   = pref.QuietHoursEnd;
 
-            // Quiet window spans midnight
-            if (start > end)
-                return now < start && now > end;
-
+            // Window spans midnight
+            if (start > end) return now < start && now > end;
             return now < start || now > end;
         }
     }

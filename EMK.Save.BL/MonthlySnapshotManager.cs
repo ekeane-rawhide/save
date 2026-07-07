@@ -10,9 +10,9 @@ namespace EMK.Save.BL
             {
                 tblMonthlySnapshot row = Map<MonthlySnapshot, tblMonthlySnapshot>(snapshot);
                 return await base.InsertAsync(row,
-                    e => e.UserId == snapshot.UserId
-                      && e.Month  == snapshot.Month
-                      && e.Year   == snapshot.Year,
+                    e => e.SharedBudgetId == snapshot.SharedBudgetId
+                      && e.Month          == snapshot.Month
+                      && e.Year           == snapshot.Year,
                     rollback);
             }
             catch (Exception) { throw; }
@@ -28,48 +28,45 @@ namespace EMK.Save.BL
             catch (Exception) { throw; }
         }
 
-        public async Task<List<MonthlySnapshot>> LoadAsync(Guid userId, int? limitMonths = null)
+        public async Task<List<MonthlySnapshot>> LoadAsync(Guid sharedBudgetId, int? limitMonths = null)
         {
             try
             {
                 Expression<Func<tblMonthlySnapshot, object>>[] includes =
                     [x => x.CategorySummaries];
 
-                var all = (await base.LoadAsync(e => e.UserId == userId, includes))
+                var all = (await base.LoadAsync(e => e.SharedBudgetId == sharedBudgetId, includes))
                     .OrderByDescending(e => e.Year)
                     .ThenByDescending(e => e.Month)
                     .ToList();
 
-                if (limitMonths.HasValue)
-                    all = all.Take(limitMonths.Value).ToList();
+                if (limitMonths.HasValue) all = all.Take(limitMonths.Value).ToList();
 
-                var rows = new List<MonthlySnapshot>();
-                all.ForEach(e =>
+                return all.Select(e =>
                 {
-                    var s = Map<tblMonthlySnapshot, MonthlySnapshot>(e);
+                    MonthlySnapshot s = Map<tblMonthlySnapshot, MonthlySnapshot>(e);
                     s.CategorySummaries = e.CategorySummaries
                         .Select(cs => Map<tblCategorySummary, CategorySummary>(cs))
                         .ToList();
-                    rows.Add(s);
-                });
-                return rows;
+                    return s;
+                }).ToList();
             }
             catch (Exception) { throw; }
         }
 
-        public async Task<MonthlySnapshot> LoadByMonthAsync(Guid userId, int month, int year)
+        public async Task<MonthlySnapshot> LoadByMonthAsync(Guid sharedBudgetId, int month, int year)
         {
             try
             {
                 Expression<Func<tblMonthlySnapshot, object>>[] includes =
                     [x => x.CategorySummaries];
 
-                var rows = await base.LoadAsync(
-                    e => e.UserId == userId && e.Month == month && e.Year == year,
-                    includes);
+                tblMonthlySnapshot e0 = (await base.LoadAsync(
+                    e => e.SharedBudgetId == sharedBudgetId && e.Month == month && e.Year == year,
+                    includes)).FirstOrDefault()
+                    ?? throw new Exception("Snapshot not found.");
 
-                var e0 = rows.FirstOrDefault() ?? throw new Exception("Snapshot not found.");
-                var s  = Map<tblMonthlySnapshot, MonthlySnapshot>(e0);
+                MonthlySnapshot s = Map<tblMonthlySnapshot, MonthlySnapshot>(e0);
                 s.CategorySummaries = e0.CategorySummaries
                     .Select(cs => Map<tblCategorySummary, CategorySummary>(cs))
                     .ToList();
@@ -79,18 +76,17 @@ namespace EMK.Save.BL
         }
 
         /// <summary>
-        /// Builds and saves a MonthlySnapshot by aggregating live transaction data.
-        /// Call this at end-of-month (or on-demand for the current month preview).
+        /// Aggregates live transaction data and upserts a MonthlySnapshot for the given period.
         /// </summary>
-        public async Task<MonthlySnapshot> BuildSnapshotAsync(Guid userId, int month, int year)
+        public async Task<MonthlySnapshot> BuildSnapshotAsync(
+            Guid sharedBudgetId, int month, int year)
         {
             try
             {
                 using var dc = new SaveEntities(options);
 
-                // Pull transactions for the month that belong to this user's accounts
                 var transactions = dc.tblTransactions
-                    .Where(t => t.PlaidAccount.UserId == userId
+                    .Where(t => t.SharedBudgetId       == sharedBudgetId
                              && t.TransactionDate.Month == month
                              && t.TransactionDate.Year  == year
                              && !t.IsExcluded)
@@ -98,16 +94,17 @@ namespace EMK.Save.BL
 
                 var budgets = dc.tblBudgets
                     .Include(b => b.Category)
-                    .Where(b => b.UserId == userId && b.Month == month && b.Year == year)
+                    .Where(b => b.SharedBudgetId == sharedBudgetId
+                             && b.Month == month && b.Year == year)
                     .ToList();
 
                 decimal income   = transactions.Where(t => t.Amount > 0).Sum(t => t.Amount);
                 decimal expenses = transactions.Where(t => t.Amount < 0).Sum(t => Math.Abs(t.Amount));
                 decimal budgeted = budgets.Sum(b => b.PlannedAmount);
-                decimal savings  = budgets.Where(b => b.Category.CategoryType == 2).Sum(b => b.PlannedAmount);
+                decimal savings  = budgets.Where(b => b.Category.CategoryType == 2)
+                                          .Sum(b => b.PlannedAmount);
 
-                // Build category summaries
-                var summaries = budgets.Select(b =>
+                List<tblCategorySummary> summaries = budgets.Select(b =>
                 {
                     decimal actual = transactions
                         .Where(t => t.CategoryId == b.CategoryId && t.Amount < 0)
@@ -125,9 +122,9 @@ namespace EMK.Save.BL
 
                 int overBudget = summaries.Count(s => s.ActualAmount > s.PlannedAmount);
 
-                // Upsert snapshot
-                var existing = dc.tblMonthlySnapshots
-                    .FirstOrDefault(s => s.UserId == userId && s.Month == month && s.Year == year);
+                tblMonthlySnapshot? existing = dc.tblMonthlySnapshots
+                    .FirstOrDefault(s => s.SharedBudgetId == sharedBudgetId
+                                      && s.Month == month && s.Year == year);
 
                 if (existing != null)
                 {
@@ -139,7 +136,6 @@ namespace EMK.Save.BL
                     existing.OverBudgetCategoryCount  = overBudget;
                     existing.SnapshotDate             = DateTime.Now;
 
-                    // Remove old summaries and replace
                     dc.tblCategorySummaries.RemoveRange(
                         dc.tblCategorySummaries.Where(cs => cs.SnapshotId == existing.Id));
                     summaries.ForEach(s => s.SnapshotId = existing.Id);
@@ -149,17 +145,17 @@ namespace EMK.Save.BL
                 {
                     var snap = new tblMonthlySnapshot
                     {
-                        Id                   = Guid.NewGuid(),
-                        UserId               = userId,
-                        Month                = month,
-                        Year                 = year,
-                        TotalIncome          = income,
-                        TotalExpenses        = expenses,
-                        TotalBudgeted        = budgeted,
-                        TotalSavings         = savings,
-                        TransactionCount     = transactions.Count,
+                        Id                      = Guid.NewGuid(),
+                        SharedBudgetId          = sharedBudgetId,
+                        Month                   = month,
+                        Year                    = year,
+                        TotalIncome             = income,
+                        TotalExpenses           = expenses,
+                        TotalBudgeted           = budgeted,
+                        TotalSavings            = savings,
+                        TransactionCount        = transactions.Count,
                         OverBudgetCategoryCount = overBudget,
-                        SnapshotDate         = DateTime.Now
+                        SnapshotDate            = DateTime.Now
                     };
                     summaries.ForEach(s => s.SnapshotId = snap.Id);
                     snap.CategorySummaries = summaries;
@@ -167,7 +163,7 @@ namespace EMK.Save.BL
                 }
 
                 dc.SaveChanges();
-                return await LoadByMonthAsync(userId, month, year);
+                return await LoadByMonthAsync(sharedBudgetId, month, year);
             }
             catch (Exception) { throw; }
         }

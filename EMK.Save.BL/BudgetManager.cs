@@ -10,10 +10,10 @@ namespace EMK.Save.BL
             {
                 tblBudget row = Map<Budget, tblBudget>(budget);
                 return await base.InsertAsync(row,
-                    e => e.UserId == budget.UserId
-                      && e.CategoryId == budget.CategoryId
-                      && e.Month == budget.Month
-                      && e.Year == budget.Year,
+                    e => e.SharedBudgetId == budget.SharedBudgetId
+                      && e.CategoryId     == budget.CategoryId
+                      && e.Month          == budget.Month
+                      && e.Year           == budget.Year,
                     rollback);
             }
             catch (Exception) { throw; }
@@ -29,7 +29,7 @@ namespace EMK.Save.BL
             catch (Exception) { throw; }
         }
 
-        public async Task<List<Budget>> LoadAsync(Guid userId, int month, int year)
+        public async Task<List<Budget>> LoadAsync(Guid sharedBudgetId, int month, int year)
         {
             try
             {
@@ -39,38 +39,32 @@ namespace EMK.Save.BL
                     x => x.Transactions
                 ];
 
-                var filter = (Expression<Func<tblBudget, bool>>)
-                    (e => e.UserId == userId && e.Month == month && e.Year == year);
-
                 var rows = new List<Budget>();
 
-                (await base.LoadAsync(filter, includes))
-                    .ForEach(e =>
-                    {
-                        Budget b = Map<tblBudget, Budget>(e);
-                        b.CategoryName  = e.Category.Name;
-                        b.CategoryIcon  = e.Category.Icon;
-                        b.CategoryColor = e.Category.Color;
-                        b.CategoryType  = (CategoryType)e.Category.CategoryType;
-
-                        b.Transactions  = e.Transactions
-                            .Select(t =>
-                            {
-                                var tx = Map<tblTransaction, Transaction>(t);
-                                tx.IsAssigned = t.CategoryId.HasValue;
-                                return tx;
-                            })
-                            .ToList();
-
-                        rows.Add(b);
-                    });
+                (await base.LoadAsync(
+                    e => e.SharedBudgetId == sharedBudgetId
+                      && e.Month          == month
+                      && e.Year           == year,
+                    includes))
+                .ForEach(e =>
+                {
+                    Budget b        = Map<tblBudget, Budget>(e);
+                    b.CategoryName  = e.Category.Name;
+                    b.CategoryIcon  = e.Category.Icon;
+                    b.CategoryColor = e.Category.Color;
+                    b.CategoryType  = (CategoryType)e.Category.CategoryType;
+                    b.Transactions  = e.Transactions
+                        .Select(t => Map<tblTransaction, Transaction>(t))
+                        .ToList();
+                    rows.Add(b);
+                });
 
                 return rows;
             }
             catch (Exception) { throw; }
         }
 
-        public async Task<Budget> LoadByIdAsync(Guid id)
+        public new async Task<Budget> LoadByIdAsync(Guid id)
         {
             try
             {
@@ -80,14 +74,17 @@ namespace EMK.Save.BL
                     x => x.Transactions
                 ];
 
-                var rows = await base.LoadAsync(e => e.Id == id, includes);
-                var e0   = rows.FirstOrDefault() ?? throw new Exception("Budget not found.");
+                tblBudget e0 = (await base.LoadAsync(e => e.Id == id, includes)).FirstOrDefault()
+                               ?? throw new Exception("Budget not found.");
 
-                Budget b = Map<tblBudget, Budget>(e0);
+                Budget b        = Map<tblBudget, Budget>(e0);
                 b.CategoryName  = e0.Category.Name;
                 b.CategoryIcon  = e0.Category.Icon;
                 b.CategoryColor = e0.Category.Color;
                 b.CategoryType  = (CategoryType)e0.Category.CategoryType;
+                b.Transactions  = e0.Transactions
+                    .Select(t => Map<tblTransaction, Transaction>(t))
+                    .ToList();
                 return b;
             }
             catch (Exception) { throw; }

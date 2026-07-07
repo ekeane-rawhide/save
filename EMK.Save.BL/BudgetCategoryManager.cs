@@ -11,7 +11,7 @@ namespace EMK.Save.BL
                 tblBudgetCategory row = Map<BudgetCategory, tblBudgetCategory>(category);
                 row.CategoryType = (int)category.CategoryType;
                 return await base.InsertAsync(row,
-                    e => e.UserId == category.UserId && e.Name == category.Name,
+                    e => e.SharedBudgetId == category.SharedBudgetId && e.Name == category.Name,
                     rollback);
             }
             catch (Exception) { throw; }
@@ -28,36 +28,35 @@ namespace EMK.Save.BL
             catch (Exception) { throw; }
         }
 
-        public async Task<List<BudgetCategory>> LoadAsync(Guid? userId = null)
+        public async Task<List<BudgetCategory>> LoadAsync(Guid sharedBudgetId)
         {
             try
             {
-                Expression<Func<tblBudgetCategory, bool>>? filter =
-                    userId.HasValue ? e => e.UserId == userId.Value && e.IsActive : e => e.IsActive;
-
                 var rows = new List<BudgetCategory>();
-                (await base.LoadAsync(filter))
+
+                (await base.LoadAsync(e => e.SharedBudgetId == sharedBudgetId && e.IsActive))
                     .OrderBy(e => e.SortOrder)
                     .ToList()
                     .ForEach(e =>
                     {
-                        var cat = Map<tblBudgetCategory, BudgetCategory>(e);
-                        cat.CategoryType = (CategoryType)e.CategoryType;
+                        BudgetCategory cat = Map<tblBudgetCategory, BudgetCategory>(e);
+                        cat.CategoryType   = (CategoryType)e.CategoryType;
                         rows.Add(cat);
                     });
+
                 return rows;
             }
             catch (Exception) { throw; }
         }
 
-        public async Task<BudgetCategory> LoadByIdAsync(Guid id)
+        public new async Task<BudgetCategory> LoadByIdAsync(Guid id)
         {
             try
             {
-                var row = (await base.LoadAsync(e => e.Id == id)).FirstOrDefault()
-                          ?? throw new Exception("BudgetCategory not found.");
-                var cat = Map<tblBudgetCategory, BudgetCategory>(row);
-                cat.CategoryType = (CategoryType)row.CategoryType;
+                tblBudgetCategory row = (await base.LoadAsync(e => e.Id == id)).FirstOrDefault()
+                                        ?? throw new Exception("BudgetCategory not found.");
+                BudgetCategory cat = Map<tblBudgetCategory, BudgetCategory>(row);
+                cat.CategoryType   = (CategoryType)row.CategoryType;
                 return cat;
             }
             catch (Exception) { throw; }

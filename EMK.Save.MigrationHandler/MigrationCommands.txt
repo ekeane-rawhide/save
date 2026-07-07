@@ -1,4 +1,4 @@
-Create DB: Add-Migration CarsDb
+Create DB: Add-Migration SaveDb
 Populate/Update: Update-Database
 Drop DB: Drop-Database
 Remove Migration: Remove-Migration

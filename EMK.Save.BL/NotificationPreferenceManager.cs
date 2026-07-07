@@ -30,16 +30,17 @@ namespace EMK.Save.BL
         {
             try
             {
-                var row = (await base.LoadAsync(e => e.UserId == userId)).FirstOrDefault()
-                          ?? throw new Exception("Notification preferences not found.");
+                tblNotificationPreference row =
+                    (await base.LoadAsync(e => e.UserId == userId)).FirstOrDefault()
+                    ?? throw new Exception("Notification preferences not found.");
                 return Map<tblNotificationPreference, NotificationPreference>(row);
             }
             catch (Exception) { throw; }
         }
 
         /// <summary>
-        /// Saves the Web Push subscription keys received from the browser after
-        /// the user grants notification permission.
+        /// Persists the Web Push subscription keys received from the browser
+        /// after the user grants notification permission.
         /// </summary>
         public async Task<int> SaveSubscriptionAsync(
             Guid userId, string endpoint, string p256dh, string auth, bool rollback = false)
@@ -47,36 +48,36 @@ namespace EMK.Save.BL
             try
             {
                 using var dc = new SaveEntities(options);
-                IDbContextTransaction? txn = null;
-                if (rollback) txn = dc.Database.BeginTransaction();
+                IDbContextTransaction? txn = rollback ? dc.Database.BeginTransaction() : null;
 
-                var row = dc.tblNotificationPreferences.FirstOrDefault(p => p.UserId == userId)
-                          ?? throw new Exception("Preferences not found.");
+                tblNotificationPreference row =
+                    dc.tblNotificationPreferences.FirstOrDefault(p => p.UserId == userId)
+                    ?? throw new Exception("Preferences not found.");
 
-                row.PushEndpoint   = endpoint;
-                row.P256dhKey      = p256dh;
-                row.AuthKey        = auth;
-                row.IsPushEnabled  = true;
-                row.LastUpdated    = DateTime.Now;
+                row.PushEndpoint  = endpoint;
+                row.P256dhKey     = p256dh;
+                row.AuthKey       = auth;
+                row.IsPushEnabled = true;
+                row.LastUpdated   = DateTime.Now;
 
-                var result = dc.SaveChanges();
-                if (rollback) txn?.Rollback();
+                int result = dc.SaveChanges();
+                txn?.Rollback();
                 return result;
             }
             catch (Exception) { throw; }
         }
 
-        /// <summary>Disables push for the user and clears VAPID keys.</summary>
+        /// <summary>Disables push for the user and clears the VAPID subscription keys.</summary>
         public async Task<int> RevokeSubscriptionAsync(Guid userId, bool rollback = false)
         {
             try
             {
                 using var dc = new SaveEntities(options);
-                IDbContextTransaction? txn = null;
-                if (rollback) txn = dc.Database.BeginTransaction();
+                IDbContextTransaction? txn = rollback ? dc.Database.BeginTransaction() : null;
 
-                var row = dc.tblNotificationPreferences.FirstOrDefault(p => p.UserId == userId)
-                          ?? throw new Exception("Preferences not found.");
+                tblNotificationPreference row =
+                    dc.tblNotificationPreferences.FirstOrDefault(p => p.UserId == userId)
+                    ?? throw new Exception("Preferences not found.");
 
                 row.PushEndpoint  = string.Empty;
                 row.P256dhKey     = string.Empty;
@@ -84,8 +85,8 @@ namespace EMK.Save.BL
                 row.IsPushEnabled = false;
                 row.LastUpdated   = DateTime.Now;
 
-                var result = dc.SaveChanges();
-                if (rollback) txn?.Rollback();
+                int result = dc.SaveChanges();
+                txn?.Rollback();
                 return result;
             }
             catch (Exception) { throw; }
