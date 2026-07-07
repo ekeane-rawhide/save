@@ -151,6 +151,17 @@ public class PlaidAccountController : ControllerBase
 
                 Guid id = await manager.InsertAsync(account, encryptedToken, rollback);
                 insertedIds.Add(id.ToString());
+
+                // Auto-sync transactions for newly linked account
+                try
+                {
+                    int syncedCount = await syncService.SyncAsync(id, rollback);
+                    logger.LogInformation("Auto-synced {Count} transactions for new account {AccountId}", syncedCount, id);
+                }
+                catch (Exception ex)
+                {
+                    logger.LogWarning(ex, "Failed to auto-sync transactions for new account {AccountId}", id);
+                }
             }
 
             logger.LogInformation(
@@ -162,6 +173,43 @@ public class PlaidAccountController : ControllerBase
             logger.LogError(ex, "Failed to exchange Plaid public token for user {UserId}", userId);
             logger.LogError(ex, "Unhandled error");
             return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An unexpected error occurred." });
+        }
+    }
+
+    /// <summary>Syncs all Plaid accounts for a shared budget.</summary>
+    [Authorize]
+    [HttpPost("refresh/{sharedBudgetId}")]
+    public async Task<ActionResult> RefreshAll(Guid sharedBudgetId)
+    {
+        try
+        {
+            var manager = new PlaidAccountManager(options, logger);
+            var accounts = await manager.LoadAsync(sharedBudgetId);
+
+            if (!accounts.Any())
+                return Ok(new { syncedCount = 0, message = "No linked accounts" });
+
+            int totalSynced = 0;
+            foreach (var account in accounts)
+            {
+                try
+                {
+                    int syncedCount = await syncService.SyncAsync(account.Id);
+                    totalSynced += syncedCount;
+                }
+                catch (Exception ex)
+                {
+                    logger.LogWarning(ex, "Failed to sync account {AccountId}", account.Id);
+                }
+            }
+
+            logger.LogInformation("Refreshed {Count} transactions for SharedBudget {SharedBudgetId}", totalSynced, sharedBudgetId);
+            return Ok(new { syncedCount = totalSynced, message = $"Synced {totalSynced} transactions" });
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Failed to refresh transactions");
+            return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Failed to refresh transactions" });
         }
     }
 

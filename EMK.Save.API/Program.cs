@@ -55,6 +55,7 @@ public class Program
 
         // ── DI ────────────────────────────────────────────────────────────────
         builder.Services.AddScoped<IUserService, UserService>();
+        builder.Services.AddHostedService<PlaidSyncBackgroundService>();
 
         // ── CORS — allow the React PWA origin ─────────────────────────────────
         builder.Services.AddCors(o => o.AddPolicy("PWAPolicy", policy =>

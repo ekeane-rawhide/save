@@ -137,6 +137,19 @@ namespace EMK.Save.BL
             }
             catch (Exception) { throw; }
         }
+
+        /// <summary>Returns all active Plaid accounts for background sync.</summary>
+        public async Task<List<PlaidAccount>> GetAllActiveAccountsAsync()
+        {
+            try
+            {
+                var rows = new List<PlaidAccount>();
+                (await base.LoadAsync(e => e.IsActive))
+                    .ForEach(e => rows.Add(Map<tblPlaidAccount, PlaidAccount>(e)));
+                return rows;
+            }
+            catch (Exception) { throw; }
+        }
     }
 
     public record SyncContext(

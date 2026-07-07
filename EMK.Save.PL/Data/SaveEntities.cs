@@ -549,7 +549,7 @@ namespace EMK.Save.PL.Data
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Transactions)
                     .HasForeignKey(d => d.CategoryId)
-                    .OnDelete(DeleteBehavior.NoAction)
+                    .OnDelete(DeleteBehavior.SetNull)
                     .HasConstraintName("FK_tblTransaction_CategoryId");
             });
 

@@ -1,10 +1,11 @@
 import { useMemo, useState } from 'react'
-import { IconSearch, IconReceiptOff } from '@tabler/icons-react'
+import { IconSearch, IconReceiptOff, IconRefresh } from '@tabler/icons-react'
 import { useAuth } from '@/context/AuthContext'
 import { usePeriod } from '@/context/PeriodContext'
 import { useTransactions, useAssignCategory } from '@/hooks/useTransactions'
 import { useBudgetCategories } from '@/hooks/useBudgetCategories'
 import { useToast } from '@/context/ToastContext'
+import { apiClient } from '@/lib/apiClient'
 import { MonthSwitcher } from '@/components/MonthSwitcher'
 import { Card } from '@/components/ui/Card'
 import { Input } from '@/components/ui/Input'
@@ -19,7 +20,7 @@ import type { Transaction } from '@/types/models'
 export function TransactionsPage() {
   const { user } = useAuth()
   const { month, year } = usePeriod()
-  const { data: transactions, isLoading } = useTransactions(user?.SharedBudgetId, month, year)
+  const { data: transactions, isLoading, refetch } = useTransactions(user?.SharedBudgetId, month, year)
   const { data: categories } = useBudgetCategories(user?.SharedBudgetId)
   const assignCategory = useAssignCategory()
   const { show } = useToast()
@@ -27,6 +28,21 @@ export function TransactionsPage() {
   const [filter, setFilter] = useState<'all' | 'unassigned'>('all')
   const [search, setSearch] = useState('')
   const [selected, setSelected] = useState<Transaction | null>(null)
+  const [isRefreshing, setIsRefreshing] = useState(false)
+
+  const handleRefresh = async () => {
+    if (!user?.SharedBudgetId || isRefreshing) return
+    try {
+      setIsRefreshing(true)
+      await apiClient.post(`plaidaccount/refresh/${user.SharedBudgetId}`)
+      show('Transactions refreshed', 'success')
+      await refetch()
+    } catch (error) {
+      show('Failed to refresh transactions', 'error')
+    } finally {
+      setIsRefreshing(false)
+    }
+  }
 
   const filtered = useMemo(() => {
     let rows = transactions ?? []
@@ -55,7 +71,17 @@ export function TransactionsPage() {
     <div className="flex flex-col gap-5 pb-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-2xl font-semibold tracking-tight text-[var(--text-primary)]">Transactions</h1>
-        <MonthSwitcher />
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleRefresh}
+            disabled={isRefreshing}
+            className="rounded-lg p-2 hover:bg-[var(--surface-sunken)] disabled:opacity-50"
+            title="Refresh transactions from Plaid"
+          >
+            <IconRefresh size={20} className={isRefreshing ? 'animate-spin' : ''} />
+          </button>
+          <MonthSwitcher />
+        </div>
       </div>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
