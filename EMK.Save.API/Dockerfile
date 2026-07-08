@@ -27,7 +27,7 @@ WORKDIR /app
 RUN apt-get update \
     && apt-get install -y --no-install-recommends curl \
     && rm -rf /var/lib/apt/lists/* \
-    && adduser --disabled-password --home /app --gecos '' appuser
+    && useradd -m -u 1000 appuser
 
 COPY --from=build /app/publish .
 RUN chown -R appuser /app
